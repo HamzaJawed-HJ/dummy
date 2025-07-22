@@ -32,7 +32,11 @@ class UserProfileScreen extends StatelessWidget {
                 children: [
                   Text(
                     profileViewModel.role ?? "Loading...",
-                    style: TextStyle(color: blueColor, letterSpacing: 2, fontSize: 28, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: blueColor,
+                        letterSpacing: 2,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
 
@@ -50,12 +54,19 @@ class UserProfileScreen extends StatelessWidget {
                   // Display user data (using profileViewModel)
                   Text(
                     profileViewModel.fullName ?? "Loading...",
-                    style: TextStyle(color: blueColor, letterSpacing: 2, fontSize: 28, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: blueColor,
+                        letterSpacing: 2,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  _buildProfileDetailRow("Email", profileViewModel.email ?? "Loading..."),
-                  _buildProfileDetailRow("Phone Number", profileViewModel.phoneNumber ?? "Loading..."),
-                  _buildProfileDetailRow("CNIC", profileViewModel.cnic ?? "Loading..."),
+                  // _buildProfileDetailRow(
+                  //     " ", profileViewModel.email ?? "Loading..."),
+                  // _buildProfileDetailRow("Phone Number",
+                  //     profileViewModel.phoneNumber ?? "Loading..."),
+                  // _buildProfileDetailRow(
+                  //     "CNIC", profileViewModel.cnic ?? "Loading..."),
 
                   SizedBox(height: 10),
                   Divider(height: 10),
@@ -67,6 +78,26 @@ class UserProfileScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 10),
+
+                  ProfileWidget(
+                    title: "Change Password",
+                    icon: Icons.lock_open,
+                    onTap: () {
+                      // Navigate to Edit Profile screen
+                    },
+                  ),
+
+                  SizedBox(height: 10),
+
+                  ProfileWidget(
+                    title: "Upload Document",
+                    icon: Icons.document_scanner,
+                    onTap: () {
+                      // Navigate to Edit Profile screen
+                    },
+                  ),
+                  SizedBox(height: 10),
+
                   // Logout button
                   ListTile(
                     onTap: () => profileViewModel.logout(context),
@@ -105,12 +136,18 @@ class UserProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "$title: ",
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 26, color: blueColor), // Label text style
+            "$title:",
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 26,
+                color: blueColor), // Label text style
           ),
           Text(
             value,
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 26, color: TextColor), // Value text style
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 26,
+                color: TextColor), // Value text style
           ),
         ],
       ),
