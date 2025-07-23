@@ -30,6 +30,10 @@ class SessionManager {
   // Save User Information
   static Future<void> saveUserInfo(User userInfo) async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', userInfo.id);
+    await prefs.setString('profilePicture', userInfo.profilePicture);
+    await prefs.setString('cnicPicture', userInfo.cnicPicture);
+
     await prefs.setString('fullName', userInfo.fullName);
     await prefs.setString('email', userInfo.email);
     await prefs.setString('phoneNumber', userInfo.phoneNumber);
@@ -42,6 +46,9 @@ class SessionManager {
   static Future<Map<String, String?>> getUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     return {
+      'id': prefs.getString('id'),
+      'profilePicture': prefs.getString('profilePicture'),
+      'cnicPicture': prefs.getString('cnicPicture'),
       'fullName': prefs.getString('fullName'),
       'email': prefs.getString('email'),
       'phoneNumber': prefs.getString('phoneNumber'),
@@ -54,6 +61,11 @@ class SessionManager {
   // Save Renter Information
   static Future<void> saveRenterInfo(RenterModel renterInfo) async {
     final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('id', renterInfo.id);
+    await prefs.setString('profilePicture', renterInfo.profilePicture);
+    await prefs.setString('cnicPicture', renterInfo.cnicPicture);
+
     await prefs.setString('fullName', renterInfo.fullName);
     await prefs.setString('email', renterInfo.email);
     await prefs.setString('phoneNumber', renterInfo.phoneNumber);
@@ -68,6 +80,9 @@ class SessionManager {
   static Future<Map<String, String?>> getRenterInfo() async {
     final prefs = await SharedPreferences.getInstance();
     return {
+      'id': prefs.getString('id'),
+      'profilePicture': prefs.getString('profilePicture'),
+      'cnicPicture': prefs.getString('cnicPicture'),
       'fullName': prefs.getString('fullName'),
       'email': prefs.getString('email'),
       'phoneNumber': prefs.getString('phoneNumber'),

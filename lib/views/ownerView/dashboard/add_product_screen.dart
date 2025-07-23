@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/helper_functions.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
@@ -48,9 +49,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
         centerTitle: true,
         title: Text(
           'Add New Product',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
         ),
-        backgroundColor: Colors.blue[800],
+        // backgroundColor: Colors.blue[800],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -59,31 +60,70 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              // SizedBox(height: 20),
 
               Center(
                 child: GestureDetector(
                   onTap: _pickImage,
-                  child: Container(
-                    width: double.infinity,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      border: Border.all(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(12),
+                  child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    dashPattern: [6, 3],
+                    color: Colors.blue,
+                    strokeWidth: 1.5,
+                    child: Container(
+                      width: double.infinity,
+                      height: 160,
+                      color: const Color(0xFFF9FAFB),
+                      child: _image != null
+                          ? Image.file(_image!, fit: BoxFit.cover)
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(Icons.image_outlined,
+                                    size: 40, color: Colors.blue),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Upload Photo',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Tap to select from gallery',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
+                            ),
                     ),
-                    child: _image != null
-                        ? Image.file(_image!, fit: BoxFit.cover)
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add_a_photo,
-                                  size: 40, color: Colors.blue),
-                              SizedBox(height: 10),
-                              Text("Add Product Photo")
-                            ],
-                          ),
                   ),
+
+                  //  Container(
+                  //   width: double.infinity,
+                  //   height: 180,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.blue[50],
+                  //     border: Border.all(color: Colors.blue),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: _image != null
+                  //       ? Image.file(_image!, fit: BoxFit.cover)
+                  //       : Column(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Icon(Icons.add_a_photo,
+                  //                 size: 40, color: Colors.blue),
+                  //             SizedBox(height: 10),
+                  //             Text("Add Photo")
+                  //           ],
+                  //         ),
+                  // ),
                 ),
               ),
               SizedBox(height: 20),
@@ -116,6 +156,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   spacing: 20,
                   children: ["Sedans", "SUVs", "MPVs"].map((cat) {
                     return ChoiceChip(
+                      backgroundColor: Colors.white,
                       label: Text(cat),
                       selected: selectedCategory == cat,
                       selectedColor: Colors.blue[200],
@@ -224,7 +265,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   height: 55,
                   decoration: BoxDecoration(
                       color: Colors.blue.shade600,
-                      borderRadius: BorderRadius.circular(14)),
+                      borderRadius: BorderRadius.circular(40)),
                   child: productVM.isLoading
                       ? CircularProgressIndicator(
                           strokeWidth: 4,

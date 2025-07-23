@@ -12,6 +12,7 @@ class UserDashboardScreen extends StatelessWidget {
     final userViewModel = Provider.of<UserDashboardViewModel>(context);
 
     return Scaffold(
+        backgroundColor: Colors.white,
         body: userViewModel.getSelectedScreen(userViewModel.selectedIndex),
         bottomNavigationBar: BottomNavBar(
           index: userViewModel.selectedIndex,

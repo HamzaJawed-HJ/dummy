@@ -27,7 +27,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   backgroundColor: blueColor,
                   child: Icon(
                     Icons.home_rounded,
-                    color: whiteColor,
+                    color: Colors.white,
                   ),
                 )
               : Icon(Icons.home_rounded),
@@ -39,7 +39,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   backgroundColor: blueColor,
                   child: Icon(
                     Icons.add_box_outlined,
-                    color: whiteColor,
+                    color: Colors.white,
                   ),
                 )
               : const Icon(Icons.add_box_outlined),
@@ -51,7 +51,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   backgroundColor: blueColor,
                   child: Icon(
                     Icons.calendar_month_outlined,
-                    color: whiteColor,
+                    color: Colors.white,
                   ),
                 )
               : Icon(Icons.calendar_month_outlined),
@@ -63,7 +63,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   backgroundColor: blueColor,
                   child: Icon(
                     Icons.person_4_outlined,
-                    color: whiteColor,
+                    color: Colors.white,
                   ),
                 )
               : const Icon(
@@ -72,7 +72,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           label: 'Profile',
         )
       ],
-      backgroundColor: whiteColor,
+      // backgroundColor: whiteColor,
       selectedItemColor: blueColor,
       unselectedItemColor: Colors.grey.shade700,
       onTap: widget.onTap,

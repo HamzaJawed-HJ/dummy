@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   String? _fullName;
@@ -9,6 +12,9 @@ class ProfileViewModel extends ChangeNotifier {
   String? _role;
   String? _area;
   String? _cnic;
+  String? id;
+  String? profilePicture;
+  String? cnicPicture;
 
   // Getter methods
   String? get fullName => _fullName;
@@ -27,6 +33,9 @@ class ProfileViewModel extends ChangeNotifier {
     _role = userInfo['role'];
     _area = userInfo['area'];
     _cnic = userInfo['cnic'];
+    profilePicture = userInfo['profilePicture'];
+
+    cnicPicture = userInfo['cnicPicture'];
     notifyListeners(); // Notify listeners to rebuild the UI
   }
 
@@ -35,5 +44,15 @@ class ProfileViewModel extends ChangeNotifier {
     await SessionManager.clearSession(); // Clear session data
     Navigator.pushReplacementNamed(
         context, RoutesName.renterLoginScreen); // Navigate to the login screen
+  }
+
+  File? image;
+  final picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+    }
   }
 }

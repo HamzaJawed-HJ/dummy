@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/helper_functions.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
 import 'package:fyp_renterra_frontend/data/models/user_model.dart';
+import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/data/repositories/auth_repository.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
 
@@ -105,4 +108,30 @@ class UserAuthViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
+
+// Future<void> getProfilebyId({
+//     required String profileId,
+//   }) async {
+//     log(profileId.toString());
+//     try {
+//       // Call the API method from AuthRepository
+//       final response = await ApiClient.get("/users/profile-renter/$profileId", isToken: true);
+
+
+//       if (response['success']) {
+        
+//         notifyListeners();
+
+//       } else {
+//       }
+//     } catch (error) {
+//       HelperFunctions.showErrorSnackbar(context, error.toString());
+//       _setLoading(false);
+//       notifyListeners();
+//     }
+//   }
+
 }
