@@ -28,48 +28,51 @@ class UploadDocumentScreen extends StatelessWidget {
           children: [
             SizedBox(height: 20),
             const Text(
-              "Profile Picture:",
+              "CNIC Picture",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 18),
 
             Center(
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey.shade400)),
-                    child: const CircleAvatar(
-                      radius: 60,
-                      child: Icon(
-                        Icons.person_rounded,
-                        size: 80,
-                        color: Color.fromARGB(255, 19, 111, 153),
+              child: InkWell(
+                onTap: profileVM.pickProfileImage,
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey.shade400)),
+                      child: const CircleAvatar(
+                        radius: 60,
+                        child: Icon(
+                          Icons.person_rounded,
+                          size: 80,
+                          color: Color.fromARGB(255, 19, 111, 153),
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 2,
-                    right: 0,
-                    child: Container(
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.blue),
-                        child: Icon(
-                          size: 20,
-                          Icons.add_a_photo,
-                          color: Colors.white,
-                        )),
-                  )
-                ],
+                    Positioned(
+                      bottom: 2,
+                      right: 0,
+                      child: Container(
+                          padding: EdgeInsets.all(7),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.blue),
+                          child: Icon(
+                            size: 20,
+                            Icons.add_a_photo,
+                            color: Colors.white,
+                          )),
+                    )
+                  ],
+                ),
               ),
             ),
 
             const SizedBox(height: 28),
 
             const Text(
-              "CNIC Picture:",
+              "CNIC Picture",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 18),
@@ -133,7 +136,13 @@ class UploadDocumentScreen extends StatelessWidget {
               backgroundColor: Colors.blue.shade600,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
-            onPressed: () {},
+            onPressed: () {
+              profileVM.uploadImages(
+                profileImage: profileVM.profileImage,
+                cnicImage: profileVM.cnicImage,
+                context: context,
+              );
+            },
             child: const Text(
               'Upload',
               style: TextStyle(color: Colors.white, fontSize: 16),

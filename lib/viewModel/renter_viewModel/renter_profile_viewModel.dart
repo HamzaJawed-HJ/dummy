@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fyp_renterra_frontend/core/utlis/helper_functions.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
+import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -46,13 +48,53 @@ class ProfileViewModel extends ChangeNotifier {
         context, RoutesName.renterLoginScreen); // Navigate to the login screen
   }
 
-  File? image;
+  File? cnicImage;
   final picker = ImagePicker();
+  File? profileImage;
 
-  Future<void> pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    // Pick from gallery for profile
+  Future<void> pickProfileImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      image = File(pickedFile.path);
+      profileImage = File(pickedFile.path);
+      notifyListeners();
     }
   }
+
+  Future<void> cnicPickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      cnicImage = File(pickedFile.path);
+    }
+  }
+
+
+Future<void> uploadImages({
+  required File? profileImage,
+  required File? cnicImage,
+  required BuildContext context,
+}) async {
+  final response = await ApiClient.multipartUpload(
+    endpoint: '/api/renter/upload',
+    fields: {}, // Add any form fields if needed
+    files: {
+      'personalPicture': profileImage,
+      'cnicPicture': cnicImage,
+    },
+    isToken: true,
+  );
+
+  if (response['success'] == true) {
+  HelperFunctions.showSuccessSnackbar(
+          context, 'Upload successful');
+    
+    Navigator.pop(context);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(response['message'] ?? 'Upload failed')),
+    );
+  }
+}
+
 }

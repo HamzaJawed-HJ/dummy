@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:path/path.dart';
 
 class ApiClient {
   // static final String ipUrl = '192.168.0.34';
@@ -157,6 +161,68 @@ class ApiClient {
       return {
         'success': false,
         'message': 'An error occurred "IP URL ": $e',
+      };
+    }
+  }
+
+  // In your ApiClient class
+  static Future<Map<String, dynamic>> multipartUpload({
+    required String endpoint,
+    required Map<String, String> fields,
+    required Map<String, File?> files, // key: fieldName, value: File
+    bool isToken = false,
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl$endpoint');
+      final request = http.MultipartRequest('POST', uri);
+
+      // Add token to header
+      if (isToken) {
+        final token = await SessionManager.getAccessToken();
+        if (token != null && token.isNotEmpty) {
+          request.headers['Authorization'] = 'Bearer $token';
+        }
+      }
+
+      // Add fields (text fields if needed)
+      request.fields.addAll(fields);
+
+      // Add files
+      for (var entry in files.entries) {
+        final fieldName = entry.key;
+        final file = entry.value;
+
+        if (file != null) {
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              fieldName,
+              file.path,
+              filename: basename(file.path),
+            ),
+          );
+        }
+      }
+
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return {
+          'success': true,
+          'message': 'Upload successful',
+          'data': jsonDecode(responseBody),
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Failed with status ${response.statusCode}',
+          'data': jsonDecode(responseBody),
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Error: $e',
       };
     }
   }
