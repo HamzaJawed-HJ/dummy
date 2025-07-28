@@ -42,7 +42,6 @@
 //   }
 // }
 
-
 class MessageModel {
   String? userId;
   List<Messages>? messages;
@@ -90,14 +89,23 @@ class Messages {
       this.iV});
 
   Messages.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    conversationId = json['conversationId'];
-    senderId = json['senderId'];
-    message = json['message'];
-    seen = json['seen'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
+    // sId = json['_id'];
+    // conversationId = json['conversationId'];
+    // senderId = json['senderId'];
+    // message = json['message'];
+    // seen = json['seen'];
+    // createdAt = json['createdAt'];
+    // updatedAt = json['updatedAt'];
+    // iV = json['__v'];
+
+    sId = json['_id'] ?? '';
+    conversationId = json['conversationId'] ?? '';
+    senderId = json['senderId'] ?? '';
+    message = json['message'] ?? '';
+    seen = json['seen'] ?? false;
+    createdAt = json['createdAt'] ?? '';
+    updatedAt = json['updatedAt'] ?? '';
+    iV = json['__v'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {

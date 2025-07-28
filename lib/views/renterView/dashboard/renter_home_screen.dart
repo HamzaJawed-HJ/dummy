@@ -25,7 +25,7 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final v = Provider.of<ProfileViewModel>(context);
+    final v = Provider.of<UserProfileViewModel>(context);
     v.loadUserData();
     return SafeArea(
       child: Scaffold(
@@ -62,8 +62,7 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
           ],
         ),
         body: RefreshIndicator(
-          onRefresh: Provider.of<ProductViewModel>(context, listen: false)
-              .getAllProducts,
+          onRefresh: Provider.of<ProductViewModel>(context, listen: false).getAllProducts,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             children: [

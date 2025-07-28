@@ -1,25 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
+import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
+import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/change_password_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/edit_profile_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/upload_document_screen.dart';
-import 'package:fyp_renterra_frontend/views/renterView/dashboard/renter_profile%20Screen/change_password_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/profile%20Screen/edit_user_profile_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/widgets/profile_screen_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
-import 'package:fyp_renterra_frontend/views/renterView/dashboard/widgets/profile_screen_widget.dart'; // Assuming this is the profile widget you're using
 
-class RenterProfileScreen extends StatelessWidget {
-  const RenterProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    loadData();
+    //  Provider.of<UserProfileViewModel>(context, listen: false).loadUserData();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  loadData() async {
+    await Provider.of<UserProfileViewModel>(context, listen: false)
+        .loadUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProfileViewModel>(
+    // final profileViewmodel = Provider.of<UserProfileViewModel>(context, listen: false).loadUserData();
+
+    return Consumer<UserProfileViewModel>(
       builder: (context, profileViewModel, child) {
         // Load user data when the screen is initialized
-        profileViewModel.loadUserData();
+        //  profileViewModel.loadUserData();
         // log("profile picture:" + profileViewModel.profilePicture!);
-
+        // loadData();
         return Scaffold(
           appBar: AppBar(
+            leading: SizedBox.shrink(),
             title: const Text(
               "My Profile",
               style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
@@ -34,11 +57,11 @@ class RenterProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   Text(
                     profileViewModel.profilePicture ?? " ",
-                    style: TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
 
                   Center(
@@ -50,23 +73,33 @@ class RenterProfileScreen extends StatelessWidget {
                               border: Border.all(color: Colors.grey.shade400)),
 
                           // profileViewModel.profilePicture==""?
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 60,
-                            child: Icon(
-                              Icons.person_rounded,
-                              size: 80,
-                              color: Color.fromARGB(255, 19, 111, 153),
-                            ),
+                            backgroundImage: profileViewModel.profilePicture !=
+                                    null
+                                ? NetworkImage(ApiClient.baseImageUrl +
+                                    profileViewModel.profilePicture!)
+                                : profileViewModel.profileImage != null
+                                    ? FileImage(profileViewModel.profileImage!)
+                                    : null,
+                            child: profileViewModel.profilePicture != null ||
+                                    profileViewModel.profilePicture == ""
+                                ? const Icon(
+                                    Icons.person_rounded,
+                                    size: 80,
+                                    color: Color.fromARGB(255, 19, 111, 153),
+                                  )
+                                : null,
                           ),
                         ),
                         Positioned(
                           bottom: 2,
                           right: 0,
                           child: Container(
-                              padding: EdgeInsets.all(7),
-                              decoration: BoxDecoration(
+                              padding: const EdgeInsets.all(7),
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle, color: Colors.blue),
-                              child: Icon(
+                              child: const Icon(
                                 size: 20,
                                 Icons.add_a_photo,
                                 color: Colors.white,
@@ -75,26 +108,28 @@ class RenterProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Display user data (using profileViewModel)
                   Text(
                     profileViewModel.fullName ?? "Loading...",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: blueColor,
                         letterSpacing: 2,
                         fontSize: 28,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey.shade200,
                       border: Border.all(width: 2, color: Colors.grey),
                     ),
                     child: Text(
-                      "${profileViewModel.role!.toUpperCase()}" ?? "Loading...",
+                      "${(profileViewModel.role ?? "").toUpperCase()}" ??
+                          "Loading...",
                       style: const TextStyle(
                           color: blueColor,
                           letterSpacing: 2,
@@ -102,10 +137,10 @@ class RenterProfileScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     profileViewModel.email ?? "Loading...",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: blueColor,
                         letterSpacing: 2,
                         fontSize: 20,
@@ -119,8 +154,8 @@ class RenterProfileScreen extends StatelessWidget {
                   // _buildProfileDetailRow(
                   //     "CNIC", profileViewModel.cnic ?? "Loading..."),
 
-                  SizedBox(height: 30),
-                  Divider(height: 10),
+                  const SizedBox(height: 30),
+                  const Divider(height: 10),
 
                   ProfileWidget(
                     title: "Upload Document",
@@ -129,7 +164,7 @@ class RenterProfileScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => UploadDocumentScreen(),
+                            builder: (context) => const UploadDocumentScreen(),
                           ));
                       // Navigate to Edit Profile screen
                     },
@@ -138,15 +173,24 @@ class RenterProfileScreen extends StatelessWidget {
                     title: "Edit Profile",
                     icon: Icons.person_3,
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditProfileScreen(),
-                          ));
-                      // Navigate to Edit Profile screen
+                      if (profileViewModel.role == "owner") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditProfileScreen(),
+                            ));
+                        // Navigate to Edit Profile screen
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditUSerProfileScreen(),
+                            ));
+                        // Navigate to Edit Profile screen
+                      }
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   ProfileWidget(
                     title: "Change Password",
@@ -155,20 +199,46 @@ class RenterProfileScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ChangePasswordScreen(),
+                            builder: (context) => const ChangePasswordScreen(),
                           ));
 
                       // Navigate to Edit Profile screen
                     },
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   ProfileWidget(
                     title: "Delete Account",
                     icon: Icons.delete,
                     onTap: () {
-                      // Navigate to Edit Profile screen
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext dialogContext) {
+                          return AlertDialog(
+                            title: const Text("Confirm Delete"),
+                            content: const Text(
+                                "Are you sure you want to delete your account? This action cannot be undone."),
+                            actions: [
+                              TextButton(
+                                child: const Text("Cancel"),
+                                onPressed: () {
+                                  Navigator.of(dialogContext)
+                                      .pop(); // Close dialog
+                                },
+                              ),
+                              TextButton(
+                                child: const Text("Yes, Delete"),
+                                onPressed: () async {
+                                  Navigator.of(dialogContext)
+                                      .pop(); // Close dialog
+                                  profileViewModel.deleteAccount(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
 
@@ -178,14 +248,14 @@ class RenterProfileScreen extends StatelessWidget {
                   ListTile(
                     onTap: () => profileViewModel.logout(context),
                     leading: Container(
-                      padding: EdgeInsets.all(20),
-                      child: Icon(
+                      padding: const EdgeInsets.all(20),
+                      child: const Icon(
                         Icons.key_sharp,
                         color: Colors.red,
                         size: 25,
                       ),
                     ),
-                    title: Text(
+                    title: const Text(
                       "Logout",
                       style: TextStyle(
                         color: Colors.red,
@@ -213,14 +283,14 @@ class RenterProfileScreen extends StatelessWidget {
         children: [
           Text(
             "$title:",
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 26,
                 color: blueColor), // Label text style
           ),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 26,
                 color: TextColor), // Value text style

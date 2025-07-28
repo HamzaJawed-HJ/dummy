@@ -62,18 +62,20 @@ class SessionManager {
   static Future<void> saveRenterInfo(RenterModel renterInfo) async {
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.setString('id', renterInfo.id);
-    await prefs.setString('profilePicture', renterInfo.profilePicture);
-    await prefs.setString('cnicPicture', renterInfo.cnicPicture);
 
+    await prefs.setString('profilePicture', renterInfo.profilePicture);
     await prefs.setString('fullName', renterInfo.fullName);
     await prefs.setString('email', renterInfo.email);
-    await prefs.setString('phoneNumber', renterInfo.phoneNumber);
+    await prefs.setString('shopName', renterInfo.shopAddress);
+    await prefs.setString('shopAddress', renterInfo.shopAddress);
+
+    await prefs.setString('id', renterInfo.id);
+
+    await prefs.setString('cnicPicture', renterInfo.cnicPicture);
     await prefs.setString('role', renterInfo.role);
     await prefs.setString('cnic', renterInfo.cnic);
     await prefs.setString('area', renterInfo.area);
-    await prefs.setString('shopName', renterInfo.shopAddress);
-    await prefs.setString('areaAddress', renterInfo.shopAddress);
+    await prefs.setString('phoneNumber', renterInfo.phoneNumber);
   }
 
   // Get User Information

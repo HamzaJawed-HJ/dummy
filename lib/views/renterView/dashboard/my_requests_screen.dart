@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
+import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,8 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     //   final productVM = Provider.of<ProductViewModel>(context, listen: false);
+    final chatVM = Provider.of<ChatViewModel>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox.shrink(),
@@ -210,7 +213,34 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                       top: 14, bottom: 10),
                                   child: Center(
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        print(req.owner!.id);
+                                        chatVM.chartStart(
+                                            otherUserId: req.owner!.id!,
+                                            context: context,
+                                            image: req.owner?.fullName ?? "",
+                                            name: req.owner?.fullName ?? "");
+
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //       builder: (context) => ChatScreen(
+                                        //           // conversationId: id,
+                                        //           conversationId: chatVM
+                                        //               .conversationModel!.id
+                                        //           // conversationId,
+                                        //           ,
+                                        //           fullName: chatVM
+                                        //               .conversationModel!
+                                        //               .participant
+                                        //               .fullName,
+                                        //           imageUrl: chatVM
+                                        //               .conversationModel
+                                        //               !
+                                        //               .participant
+                                        //               .profilePicture),
+                                        //     ));
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         minimumSize: Size(double.infinity, 40),
                                         backgroundColor: Colors.blue[300],
@@ -235,6 +265,16 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                                   fontSize: 16,
                                                   letterSpacing: 2,
                                                   color: Colors.white)),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () {},
+                                            child: Icon(
+                                              Icons.message_rounded,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),

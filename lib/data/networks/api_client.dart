@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
@@ -9,7 +10,7 @@ import 'package:path/path.dart';
 class ApiClient {
   // static final String ipUrl = '192.168.0.34';
   // 192.168.186.226
-  static final String ipUrl = '192.168.0.37';
+  static final String ipUrl = '192.168.0.36';
   static final String baseUrl = "http://$ipUrl:3000/api";
 
   static final String baseImageUrl = "http://$ipUrl:3000/uploads/";
@@ -63,7 +64,7 @@ class ApiClient {
     }
   }
 
-  Future<http.Response> delete(String endpoint) async {
+static  Future<http.Response> delete(String endpoint) async {
     final url = Uri.parse('$baseUrl/$endpoint');
     final token = await SessionManager.getAccessToken();
 
@@ -149,7 +150,10 @@ class ApiClient {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.body.toString());
-        return jsonDecode(response.body);
+        final res = jsonDecode(response.body);
+return {'success': true, 'message': res['message'], 'data': res};
+        // return {'success': true, 'data': jsonDecode(response.body)};
+        // return jsonDecode(response.body);
       } else {
         final errorData = jsonDecode(response.body);
         return {
@@ -169,12 +173,15 @@ class ApiClient {
   static Future<Map<String, dynamic>> multipartUpload({
     required String endpoint,
     required Map<String, String> fields,
-    required Map<String, File?> files, // key: fieldName, value: File
+    required Map<String, File?> files,
+    String? apiType = "POST",
+
+    // key: fieldName, value: File
     bool isToken = false,
   }) async {
     try {
       final uri = Uri.parse('$baseUrl$endpoint');
-      final request = http.MultipartRequest('POST', uri);
+      final request = http.MultipartRequest(apiType!, uri);
 
       // Add token to header
       if (isToken) {
@@ -205,7 +212,7 @@ class ApiClient {
 
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
-
+      log(responseBody.toString());
       if (response.statusCode == 200 || response.statusCode == 201) {
         return {
           'success': true,

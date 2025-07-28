@@ -163,6 +163,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                       controller: _emailController,
                       icon: Icons.email_outlined,
                       inputType: TextInputType.emailAddress,
+                      
                       validation_text: "Email is required",
                       customValidator: Validator.validateEmail,
                     ),

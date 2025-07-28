@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/validator.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/user_viewModel/owner_profile_viewModel.dart';
 import 'package:provider/provider.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  EditProfileScreen({super.key});
+class EditUSerProfileScreen extends StatefulWidget {
+  EditUSerProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  State<EditUSerProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileScreenState extends State<EditUSerProfileScreen> {
   final ScrollController scrollController = ScrollController();
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final shopNameController = TextEditingController();
-  final shopAddressController = TextEditingController();
-  OwnerProfileViewModel? ownerVM;
+  final areaController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  UserProfileViewModel? userVM;
   @override
   void initState() {
     super.initState();
@@ -26,28 +27,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void setController() async {
-    ownerVM = Provider.of<OwnerProfileViewModel>(context, listen: false);
-    await ownerVM?.loadOwnerData();
+    userVM = Provider.of<UserProfileViewModel>(context, listen: false);
+    await userVM?.loadUserData();
+    // await ownerVM?.loadUserData();
 
-    nameController.text = ownerVM?.fullName ?? "";
-    emailController.text = ownerVM?.email ?? "";
-    shopAddressController.text = ownerVM?.shopAddress ?? "";
-    shopNameController.text = ownerVM?.shopName ?? "";
+    nameController.text = userVM?.fullName ?? "";
+    emailController.text = userVM?.email ?? "";
+    phoneNumberController.text = userVM?.phoneNumber ?? "";
+    areaController.text = userVM?.area ?? "";
   }
 
   @override
   void dispose() {
-    ownerVM?.cnicPicture = null;
-    ownerVM?.cnicImage = null;
-    ownerVM?.profileImage = null;
-    ownerVM?.profilePicture = null;
+    userVM?.cnicPicture = null;
+    userVM?.cnicImage = null;
+    userVM?.profileImage = null;
+    userVM?.profilePicture = null;
     // TODO: implement dispose
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final ownerVM = Provider.of<OwnerProfileViewModel>(context, listen: false);
+    final userProfileVM =
+        Provider.of<UserProfileViewModel>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -72,7 +75,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child:
-              Consumer<OwnerProfileViewModel>(builder: (context, value, child) {
+              Consumer<UserProfileViewModel>(builder: (context, value, child) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -155,28 +158,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  "Shop Name",
+                  "Phone Number",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(height: 8),
                 _CustomInputField(
-                  validation_text: "Enter Shop name",
-                  controller: shopNameController,
+                  validation_text: "Enter Phone number",
+                  controller: phoneNumberController,
                   prefixIcon: const Icon(Icons.add_business_rounded,
                       color: Colors.blue),
-                  hintText: 'New Shop name',
+                  hintText: 'New Phone number',
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  "Shop Address",
+                  "Area",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(height: 8),
                 _CustomInputField(
-                  validation_text: "Enter Shop Address",
-                  controller: shopAddressController,
+                  validation_text: "Enter Area",
+                  controller: areaController,
                   prefixIcon: const Icon(Icons.location_on, color: Colors.blue),
-                  hintText: 'New Shop address',
+                  hintText: 'Enter New Area',
                 ),
               ],
             );
@@ -193,14 +196,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
             onPressed: () {
-              ownerVM.editProfile(
-                context: context,
-                email: emailController.text.trim(),
-                fullName: nameController.text.trim(),
-                profileImage: ownerVM.profileImage,
-                shopAddress: shopAddressController.text.trim(),
-                shopName: shopNameController.text.trim(),
-              );
+              userProfileVM.editUserProfile(
+                  context: context,
+                  email: emailController.text.trim(),
+                  fullName: nameController.text.trim(),
+                  profileImage: userProfileVM.profileImage,
+                  area: areaController.text.trim(),
+                  phoneNumber: phoneNumberController.text.trim());
             },
             child: const Text(
               'Update Profile',

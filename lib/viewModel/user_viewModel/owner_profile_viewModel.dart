@@ -1,15 +1,15 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/helper_functions.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
+import 'package:fyp_renterra_frontend/data/models/renter_model.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserProfileViewModel extends ChangeNotifier {
+class OwnerProfileViewModel extends ChangeNotifier {
   String? _fullName;
   String? _phoneNumber;
   String? _email;
@@ -19,7 +19,8 @@ class UserProfileViewModel extends ChangeNotifier {
   String? id;
   String? profilePicture;
   String? cnicPicture;
-  bool isUploaded = false;
+  String? shopName;
+  String? shopAddress;
 
   // Getter methods
   String? get fullName => _fullName;
@@ -30,8 +31,8 @@ class UserProfileViewModel extends ChangeNotifier {
   String? get cnic => _cnic;
 
   // Method to load user data from session
-  Future<void> loadUserData() async {
-    final userInfo = await SessionManager.getUserInfo();
+  Future<void> loadOwnerData() async {
+    final userInfo = await SessionManager.getRenterInfo();
     _fullName = userInfo['fullName'];
     _phoneNumber = userInfo['phoneNumber'];
     _email = userInfo['email'];
@@ -41,6 +42,9 @@ class UserProfileViewModel extends ChangeNotifier {
     profilePicture = userInfo['profilePicture'];
 
     cnicPicture = userInfo['cnicPicture'];
+    shopName = userInfo['shopName'];
+    shopAddress = userInfo['cnic'];
+
     notifyListeners(); // Notify listeners to rebuild the UI
   }
 
@@ -68,7 +72,6 @@ class UserProfileViewModel extends ChangeNotifier {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       cnicImage = File(pickedFile.path);
-      notifyListeners();
     }
   }
 
@@ -78,15 +81,7 @@ class UserProfileViewModel extends ChangeNotifier {
     required BuildContext context,
   }) async {
     final response = await ApiClient.multipartUpload(
-      endpoint: role == 'owner'
-          ?
-          //Owner Auth work fine
-          '/renter/upload'
-          : '/user/upload',
-
-//User upload
-// '/user/upload'
-
+      endpoint: '/renter/upload',
       fields: {}, // Add any form fields if needed
       files: {
         'personalPicture': profileImage,
@@ -96,13 +91,6 @@ class UserProfileViewModel extends ChangeNotifier {
     );
 
     if (response['success'] == true) {
-      final prefs = await SharedPreferences.getInstance();
-
-      await prefs.setString('profilePicture', profileImage?.path ?? "");
-      await prefs.setString('cnicPicture', cnicImage?.path ?? "");
-
-      profileImage = null;
-      cnicImage = null;
       HelperFunctions.showSuccessSnackbar(context, 'Upload successful');
 
       Navigator.pop(context);
@@ -113,26 +101,25 @@ class UserProfileViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> editUserProfile({
+  Future<void> editProfile({
     required File? profileImage,
     required String fullName,
     required String email,
-    required String phoneNumber,
-    required String area,
+    required String shopName,
+    required String shopAddress,
     required BuildContext context,
   }) async {
     final response = await ApiClient.multipartUpload(
       apiType: "PUT",
-      endpoint: '/users/profile-renter/update',
+      endpoint: '/users/profile/update',
       fields: {
         "fullName": fullName,
         "email": email,
-        "phoneNumber": phoneNumber,
-        "area": area
+        "shopName": shopName,
+        "shopAddress": shopAddress
       }, // Add any form fields if needed
       files: {
         'personalPicture': profileImage,
-        //profilePicture
       },
       isToken: true,
     );
@@ -143,6 +130,8 @@ class UserProfileViewModel extends ChangeNotifier {
       await prefs.setString('profilePicture', profileImage?.path ?? "");
       await prefs.setString('fullName', fullName);
       await prefs.setString('email', email);
+      await prefs.setString('shopName', shopAddress);
+      await prefs.setString('shopAddress', shopAddress);
 
       await HelperFunctions.showSuccessSnackbar(context, 'Upload successful');
 
@@ -151,61 +140,6 @@ class UserProfileViewModel extends ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response['message'] ?? 'Upload failed')),
       );
-    }
-  }
-
-  Future<void> changePassword({
-    required String currentPassword,
-    required String newPassword,
-    required BuildContext context,
-  }) async {
-    final response = await ApiClient.put(
-        isToken: true,
-        role == 'owner'
-            ? "/users/change-password"
-            : "/users/renter/change-password",
-        {"currentPassword": currentPassword, "newPassword": newPassword});
-
-    if (response['success'] == true) {
-      HelperFunctions.showSuccessSnackbar(context, response['message']);
-
-      Navigator.pop(context);
-    } else {
-      HelperFunctions.showErrorSnackbar(
-          context, response['message'] ?? 'Password change failed');
-    }
-  }
-
-  Future<void> deleteAccount(BuildContext context) async {
-    // Show loader dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
-
-    try {
-      final response = await ApiClient.delete(role == 'owner'
-          ? "users/delete-account"
-          : "users/renter/delete-account");
-
-      Navigator.pop(context); // Close loader
-
-      if (response.statusCode == 200) {
-        HelperFunctions.showSuccessSnackbar(
-            context, "Account deleted successfully");
-
-        logout(context);
-      } else {
-        final errorData = jsonDecode(response.body);
-
-        // final resData = jsonDecode(response.body);
-        HelperFunctions.showErrorSnackbar(
-            context, errorData['message'] ?? "Failed to delete account");
-      }
-    } catch (e) {
-      Navigator.pop(context); // Close loader
-      HelperFunctions.showErrorSnackbar(context, "An error occurred: $e");
     }
   }
 }

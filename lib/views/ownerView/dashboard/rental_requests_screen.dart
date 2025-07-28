@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
+import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
+import 'package:fyp_renterra_frontend/views/ownerView/dashboard/user_chat_screen.dart';
 import 'package:provider/provider.dart';
 
 class RentalRequestsScreen extends StatefulWidget {
@@ -18,27 +20,6 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
     super.initState();
   }
 
-  final List<Map<String, String>> sampleRequests = [
-    {
-      'product': 'Toyota Corolla',
-      'price': 'Rs 1500/day',
-      'name': 'Ali Raza',
-      'location': 'Karachi',
-      'email': 'ali@example.com',
-      'status': 'Accepted',
-      'image': 'Pending'
-    },
-    {
-      'product': 'Honda Civic',
-      'price': 'Rs 1800/day',
-      'name': 'Usman Tariq',
-      'location': 'Lahore',
-      'email': 'usman@example.com',
-      'status': 'Pending',
-      'image': 'Pending'
-    },
-  ];
-
   Color getStatusColor(String status) {
     switch (status) {
       case 'accepted':
@@ -52,6 +33,7 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final chatVM = Provider.of<ChatViewModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox.shrink(),
@@ -229,7 +211,40 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                                       top: 14, bottom: 10),
                                   child: Center(
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        print(req
+                                            .renterRequestID!.renterID!.sId!);
+                                        chatVM.chartStart(
+                                            otherUserId: req.renterRequestID!
+                                                .renterID!.sId!,
+                                            context: context,
+                                            image: req.renterRequestID?.renterID
+                                                    ?.fullName ??
+                                                "",
+                                            name: req.renterRequestID?.renterID
+                                                    ?.fullName ??
+                                                "");
+
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //       builder: (context) => ChatScreen(
+                                        //           // conversationId: id,
+                                        //           conversationId: chatVM
+                                        //               .conversationModel!.id
+                                        //           // conversationId,
+                                        //           ,
+                                        //           fullName: chatVM
+                                        //               .conversationModel!
+                                        //               .participant
+                                        //               .fullName,
+                                        //           imageUrl: chatVM
+                                        //               .conversationModel
+                                        //               !
+                                        //               .participant
+                                        //               .profilePicture),
+                                        //     ));
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         minimumSize: Size(double.infinity, 40),
                                         backgroundColor: Colors.blue[400],
@@ -257,9 +272,12 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Colors.white,
+                                          InkWell(
+                                            onTap: () {},
+                                            child: Icon(
+                                              Icons.message_rounded,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ],
                                       ),

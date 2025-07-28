@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
+import 'package:fyp_renterra_frontend/core/utlis/validator.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
+import 'package:provider/provider.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   const ChangePasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProfileVM =
+        Provider.of<UserProfileViewModel>(context, listen: false);
+
     final oldPasswordVisible = ValueNotifier<bool>(false);
     final newPasswordVisible = ValueNotifier<bool>(false);
     final confirmPasswordVisible = ValueNotifier<bool>(false);
+
+    final formKey = GlobalKey<FormState>();
+
+    final oldPassController = TextEditingController();
+    final newPassemailController = TextEditingController();
+    final confirmPassemailController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,30 +43,43 @@ class ChangePasswordScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _PasswordLabel("Old Password"),
-              const SizedBox(height: 8),
-              _PasswordField(
-                hintText: "Enter old password",
-                isVisibleNotifier: oldPasswordVisible,
-              ),
-              const SizedBox(height: 24),
-              const _PasswordLabel("New Password"),
-              const SizedBox(height: 8),
-              _PasswordField(
-                hintText: "Enter new password",
-                isVisibleNotifier: newPasswordVisible,
-              ),
-              const SizedBox(height: 24),
-              const _PasswordLabel("Confirm Password"),
-              const SizedBox(height: 8),
-              _PasswordField(
-                hintText: "Re-enter new password",
-                isVisibleNotifier: confirmPasswordVisible,
-              ),
-            ],
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _PasswordLabel("Old Password"),
+                const SizedBox(height: 8),
+                _PasswordField(
+                  hintText: "Enter old password",
+                  isVisibleNotifier: oldPasswordVisible,
+                  validation_text: "Old Password is required",
+                  customValidator: Validator.validatePassword,
+                  controller: oldPassController,
+                ),
+                const SizedBox(height: 24),
+                const _PasswordLabel("New Password"),
+                const SizedBox(height: 8),
+                _PasswordField(
+                  controller: newPassemailController,
+                  hintText: "Enter new password",
+                  isVisibleNotifier: newPasswordVisible,
+                  validation_text: "Password is required",
+                  customValidator: Validator.validatePassword,
+                ),
+                const SizedBox(height: 24),
+                const _PasswordLabel("Confirm Password"),
+                const SizedBox(height: 8),
+                _PasswordField(
+                  controller: confirmPassemailController,
+                  validation_text: "Confirm Password is required",
+                  customValidator: (value) => Validator.validateConfirmPassword(
+                      value, newPassemailController.text),
+                  hintText: "Re-enter new password",
+                  isVisibleNotifier: confirmPasswordVisible,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -68,7 +93,14 @@ class ChangePasswordScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
             onPressed: () {
-              // handle change password
+              if (formKey.currentState!.validate()) {
+                userProfileVM.changePassword(
+                    currentPassword: oldPassController.text.trim(),
+                    newPassword: confirmPassemailController.text.trim(),
+                    context: context);
+                // All fields are valid
+                // Perform change password logic
+              }
             },
             child: const Text(
               'Change Password',
@@ -95,12 +127,17 @@ class _PasswordLabel extends StatelessWidget {
 }
 
 class _PasswordField extends StatelessWidget {
-  final String hintText;
+  final String hintText, validation_text;
   final ValueNotifier<bool> isVisibleNotifier;
+  final FormFieldValidator<String>? customValidator;
+  final TextEditingController controller;
 
   const _PasswordField({
     required this.hintText,
     required this.isVisibleNotifier,
+    required this.validation_text,
+    this.customValidator,
+    required this.controller,
   });
 
   @override
@@ -109,6 +146,7 @@ class _PasswordField extends StatelessWidget {
       valueListenable: isVisibleNotifier,
       builder: (context, isVisible, _) {
         return TextFormField(
+          controller: controller,
           obscureText: !isVisible,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
@@ -128,6 +166,16 @@ class _PasswordField extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           ),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return validation_text;
+            }
+            if (customValidator != null) {
+              return customValidator!(
+                  value); // Use the custom validator if provided
+            }
+            return null;
+          },
         );
       },
     );

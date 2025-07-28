@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
 import 'package:fyp_renterra_frontend/data/models/conversation_model.dart';
 import 'package:fyp_renterra_frontend/data/models/messages_model.dart';
+import 'package:fyp_renterra_frontend/data/models/start_conversation_model.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
+import 'package:fyp_renterra_frontend/views/ownerView/dashboard/user_chat_screen.dart';
 import 'package:http/http.dart' as http;
 
 class ChatViewModel extends ChangeNotifier {
@@ -27,9 +30,10 @@ class ChatViewModel extends ChangeNotifier {
   List<Messages> messagesList = [];
 
   String? userId;
-  late MessageModel messageModel;
+  MessageModel? messageModel;
 
-  late ConversationModel conversationModel;
+  ConversationModel? conversationModel;
+  StartConversationModel? startConversationModel;
 
   Future<void> getAllConversations() async {
     _setLoading(true);
@@ -62,8 +66,9 @@ class ChatViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> getAllMessages(String conversationId) async {
-    _setLoading(true);
+  Future<void> getAllMessages(
+      {required String conversationId, bool isload = true}) async {
+    if (isload) _setLoading(true);
     try {
       final token = await SessionManager.getAccessToken();
 
@@ -81,9 +86,9 @@ class ChatViewModel extends ChangeNotifier {
 
         messageModel = MessageModel.fromJson(data);
 
-        userId = messageModel.userId;
+        userId = messageModel?.userId;
 
-        messagesList = messageModel.messages!;
+        messagesList = messageModel?.messages ?? [];
 
         print(messagesList);
 
@@ -138,8 +143,12 @@ class ChatViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> chartStart(String otherUserId) async {
-    
+  Future<void> chartStart({
+    required String otherUserId,
+    required BuildContext context,
+    required String name,
+    required String image,
+  }) async {
     try {
       final token = await SessionManager.getAccessToken();
 
@@ -149,28 +158,34 @@ class ChatViewModel extends ChangeNotifier {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
-
-        //take from rentalmodel user id 
         body: jsonEncode({
           'otherUserId': otherUserId,
         }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.body.toString());
         final json = jsonDecode(response.body);
 
-        // Convert response into Messages model
-        conversationModel = ConversationModel.fromJson(json);
+        // Convert response into StartConversationModel
+        startConversationModel = StartConversationModel.fromJson(json);
 
-        print(conversationModel.id);
-      
-        // Notify listeners so UI rebuilds
-
+        // Navigate to chat screen with correct ID
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(
+              fullName: name,
+              imageUrl: image,
+              conversationId: startConversationModel!.id, // ✅ fixed here
+            ),
+          ),
+        );
       } else {
-        throw Exception('Failed to send message: ${response.statusCode}');
+        throw Exception('Failed to start conversation: ${response.statusCode}');
       }
     } catch (e) {
-      debugPrint('Error sending message: $e');
+      debugPrint('Error starting conversation: $e');
       rethrow;
     }
   }

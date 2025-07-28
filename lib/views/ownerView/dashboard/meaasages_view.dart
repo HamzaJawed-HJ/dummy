@@ -14,7 +14,11 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen> {
   @override
   void initState() {
-    Provider.of<ChatViewModel>(context, listen: false).getAllConversations();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<ChatViewModel>(context, listen: false).getAllConversations();
+    });
+
+    // Provider.of<ChatViewModel>(context, listen: false).getAllConversations();
     super.initState();
   }
 
@@ -24,6 +28,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: SizedBox.shrink(),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

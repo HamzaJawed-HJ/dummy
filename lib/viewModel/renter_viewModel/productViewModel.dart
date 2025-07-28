@@ -31,7 +31,8 @@ class ProductViewModel extends ChangeNotifier {
   }) async {
     _setLoading(true);
 
-    final token = await SessionManager.getAccessToken(); // or any secure storage method
+    final token =
+        await SessionManager.getAccessToken(); // or any secure storage method
 
     Map<String, String?> userInfo = await SessionManager.getUserInfo();
 
@@ -70,7 +71,8 @@ class ProductViewModel extends ChangeNotifier {
     try {
       error = null;
       final data = await ProductRepository.fetchMyProducts();
-      _products = data.map((e) => ProductModel.fromJson(e)).toList().reversed.toList();
+      _products =
+          data.map((e) => ProductModel.fromJson(e)).toList().reversed.toList();
     } catch (e) {
       _products = [];
       error = e.toString();
@@ -89,7 +91,8 @@ class ProductViewModel extends ChangeNotifier {
     try {
       error = null;
       final data = await ProductRepository.fetchAllProducts();
-      _products = data.map((e) => ProductModel.fromJson(e)).toList().reversed.toList();
+      _products =
+          data.map((e) => ProductModel.fromJson(e)).toList().reversed.toList();
     } catch (e) {
       _products = [];
       error = e.toString();
@@ -112,14 +115,18 @@ class ProductViewModel extends ChangeNotifier {
     log(productId.toString());
     try {
       // Call the API method from AuthRepository
-      final response = await ApiClient.post("/rentalRequests/create", {'productId': productId}, isToken: true);
+      final response = await ApiClient.post(
+          "/rentalRequests/create", {'productId': productId},
+          isToken: true);
 
       _setLoading(false);
 
-      if (response.containsKey('message') && response['message'].toString().toLowerCase().contains('success')) {
+      if (response.containsKey('message') &&
+          response['message'].toString().toLowerCase().contains('success')) {
         notifyListeners();
 
-        HelperFunctions.showSuccessSnackbar(context, response['message'].toString());
+        HelperFunctions.showSuccessSnackbar(
+            context, response['message'].toString());
         // Navigate to dashboard
         Navigator.pop(context);
       } else {
@@ -137,7 +144,8 @@ class ProductViewModel extends ChangeNotifier {
     try {
       error = null;
       final data = await ProductRepository.fetchAllRequest();
-      _request = data.map((e) => RequestModel.fromJson(e)).toList().reversed.toList();
+      _request =
+          data.map((e) => RequestModel.fromJson(e)).toList().reversed.toList();
     } catch (e) {
       _request = [];
       error = e.toString();
@@ -165,7 +173,11 @@ class ProductViewModel extends ChangeNotifier {
     try {
       error = null;
       final data = await ProductRepository.fetchAllNotifications();
-      _approvalList = data.map((e) => RentalApprovalModel.fromJson(e)).toList().reversed.toList();
+      _approvalList = data
+          .map((e) => RentalApprovalModel.fromJson(e))
+          .toList()
+          .reversed
+          .toList();
     } catch (e) {
       _approvalList = [];
       error = e.toString();
@@ -174,7 +186,8 @@ class ProductViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> updateRentalRequestStatus(String requestId, String status, BuildContext context) async {
+  Future<void> updateRentalRequestStatus(
+      String requestId, String status, BuildContext context) async {
     _setLoading(true);
     final result = await ProductRepository.updateRentalRequestStatus(
       requestId: requestId,
@@ -192,7 +205,7 @@ class ProductViewModel extends ChangeNotifier {
 
   Future<void> deleteProduct(String productId, BuildContext context) async {
     print(productId);
-    final response = await ApiClient().delete('products/$productId');
+    final response = await ApiClient.delete('products/$productId');
 
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -207,7 +220,7 @@ class ProductViewModel extends ChangeNotifier {
 
   Future<void> deleteRentalRequest(String id, BuildContext context) async {
     try {
-      final response = await ApiClient().delete('rentalRequests/$id');
+      final response = await ApiClient.delete('rentalRequests/$id');
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Rental request canceled successfully')),
@@ -236,7 +249,8 @@ class ProductViewModel extends ChangeNotifier {
   }) async {
     _setLoading(true);
 
-    final token = await SessionManager.getAccessToken(); // or any secure storage method
+    final token =
+        await SessionManager.getAccessToken(); // or any secure storage method
 
     Map<String, String?> userInfo = await SessionManager.getUserInfo();
 

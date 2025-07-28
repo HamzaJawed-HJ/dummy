@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void onload() async {
-    final profileVM = Provider.of<ProfileViewModel>(context, listen: false);
+    final profileVM = Provider.of<UserProfileViewModel>(context, listen: false);
     await profileVM.loadUserData();
     // ProfileViewModel obj=Provider.of(<ProfileViewModel>context,listen: false);
     //
@@ -31,11 +31,9 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacementNamed(context, RoutesName.onboardingScreen1);
       } else {
         if (profileVM.role == "owner") {
-          Navigator.pushReplacementNamed(
-              context, RoutesName.renterDashboardScreen);
+          Navigator.pushReplacementNamed(context, RoutesName.renterDashboardScreen);
         } else {
-          Navigator.pushReplacementNamed(
-              context, RoutesName.UserDashboardScreen);
+          Navigator.pushReplacementNamed(context, RoutesName.UserDashboardScreen);
         }
       }
     });

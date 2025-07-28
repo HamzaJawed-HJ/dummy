@@ -15,6 +15,7 @@ class UserDashboardScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         body: userViewModel.getSelectedScreen(userViewModel.selectedIndex),
         bottomNavigationBar: BottomNavBar(
+          isOwner: true,
           index: userViewModel.selectedIndex,
           onTap: (index) {
             userViewModel.setSelectedIndex(index); // Change selected tab
