@@ -149,6 +149,8 @@ class ChatViewModel extends ChangeNotifier {
     required String name,
     required String image,
   }) async {
+
+         _setLoading(true);
     try {
       final token = await SessionManager.getAccessToken();
 
@@ -164,6 +166,7 @@ class ChatViewModel extends ChangeNotifier {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+             _setLoading(false);
         log(response.body.toString());
         final json = jsonDecode(response.body);
 

@@ -122,7 +122,9 @@ class UploadDocumentScreen extends StatelessWidget {
                     color: const Color(0xFFF9FAFB),
                     child: profileVM.cnicPicture != ""
                         ? Image.network(
-                            ApiClient.baseImageUrl + profileVM.cnicPicture!,
+                            "${ApiClient.baseImageUrl}${profileVM.cnicPicture!}"
+                            // ApiClient.baseImageUrl + profileVM.cnicPicture!,
+                            ,
                             fit: BoxFit.cover,
                           )
                         : profileVM.cnicImage != null

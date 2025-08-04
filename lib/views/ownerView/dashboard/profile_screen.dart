@@ -59,10 +59,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const SizedBox(height: 20),
 
-                  Text(
-                    profileViewModel.profilePicture ?? " ",
-                    style: const TextStyle(color: Colors.black),
-                  ),
+                  // Text(
+                  //   profileViewModel.profilePicture ?? " ",
+                  //   style: const TextStyle(color: Colors.black),
+                  // ),
 
                   Center(
                     child: Stack(
@@ -76,13 +76,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: CircleAvatar(
                             radius: 60,
                             backgroundImage: profileViewModel.profilePicture !=
-                                    null
-                                ? NetworkImage(ApiClient.baseImageUrl +
-                                    profileViewModel.profilePicture!)
+                                    ""
+                                ? NetworkImage(
+                                    "${ApiClient.baseImageUrl}${profileViewModel.profilePicture!}"
+
+                                    // ApiClient.baseImageUrlupload +
+                                    //   profileViewModel.profilePicture!
+                                    )
                                 : profileViewModel.profileImage != null
                                     ? FileImage(profileViewModel.profileImage!)
                                     : null,
-                            child: profileViewModel.profilePicture != null ||
+                            child: profileViewModel.profilePicture != null &&
                                     profileViewModel.profilePicture == ""
                                 ? const Icon(
                                     Icons.person_rounded,

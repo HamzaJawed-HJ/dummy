@@ -37,10 +37,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void dispose() {
-    ownerVM?.cnicPicture = null;
-    ownerVM?.cnicImage = null;
-    ownerVM?.profileImage = null;
-    ownerVM?.profilePicture = null;
+    // ownerVM?.cnicPicture = null;
+    // ownerVM?.cnicImage = null;
+    // ownerVM?.profileImage = null;
+    // ownerVM?.profilePicture = null;
     // TODO: implement dispose
     super.dispose();
   }

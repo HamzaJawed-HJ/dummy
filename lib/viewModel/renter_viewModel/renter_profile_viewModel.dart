@@ -17,8 +17,8 @@ class UserProfileViewModel extends ChangeNotifier {
   String? _area;
   String? _cnic;
   String? id;
-  String? profilePicture;
-  String? cnicPicture;
+  String profilePicture = '';
+  String cnicPicture = '';
   bool isUploaded = false;
 
   // Getter methods
@@ -38,9 +38,9 @@ class UserProfileViewModel extends ChangeNotifier {
     _role = userInfo['role'];
     _area = userInfo['area'];
     _cnic = userInfo['cnic'];
-    profilePicture = userInfo['profilePicture'];
+    profilePicture = userInfo['profilePicture'] ?? "";
 
-    cnicPicture = userInfo['cnicPicture'];
+    cnicPicture = userInfo['cnicPicture'] ?? "";
     notifyListeners(); // Notify listeners to rebuild the UI
   }
 
@@ -208,4 +208,33 @@ class UserProfileViewModel extends ChangeNotifier {
       HelperFunctions.showErrorSnackbar(context, "An error occurred: $e");
     }
   }
+
+// Future<void> getAllConversations() async {
+//     try {
+
+//       final response = await ApiClient.get(
+
+// "/users/profile"
+// ,
+//         isToken:true ,
+
+//       );
+
+//       if (response.statusCode == 200) {
+//         final List<dynamic> data = jsonDecode(response.body);
+//         conversationMessageList =
+//             data.map((json) => ConversationModel.fromJson(json)).toList();
+
+//         print(data.toString());
+//         notifyListeners();
+//         _setLoading(false);
+//       } else {
+//         throw Exception(
+//             'Failed to fetch conversations: ${response.statusCode}');
+//       }
+//     } catch (e) {
+//       debugPrint('Error in getAllConversations: $e');
+//       rethrow;
+//     }
+//   }
 }

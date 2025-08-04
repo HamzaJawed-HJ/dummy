@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/user_chat_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -16,8 +18,15 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
   @override
   void initState() {
     Provider.of<ProductViewModel>(context, listen: false).getAllNotification();
+
+    loadData();
     // TODO: implement initState
     super.initState();
+  }
+
+  loadData() async {
+    await Provider.of<UserProfileViewModel>(context, listen: false)
+        .loadUserData();
   }
 
   Color getStatusColor(String status) {
@@ -27,22 +36,28 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
       case 'pending':
         return Colors.orange;
       default:
-        return Colors.grey;
+        return Colors.red;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final chatVM = Provider.of<ChatViewModel>(context, listen: false);
+    final imageVM = Provider.of<UserProfileViewModel>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox.shrink(),
         centerTitle: true,
         title: Text(
-          'Rental Requests hasvkc',
-          style: TextStyle(color: Colors.white),
+          'Rental Requests',
+          style: const TextStyle(
+            fontSize: 26,
+            wordSpacing: 2,
+            fontWeight: FontWeight.bold,
+            // color: blueColor,
+          ),
         ),
-        backgroundColor: Colors.blue[800],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -75,9 +90,9 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                           Text('Error: ${productVM.error}\n Check Internet'));
                 }
 
-                // if (productVM.request.isEmpty) {
-                //   return const Center(child: Text('No Rental Request'));
-                // }
+                if (productVM.request.isEmpty) {
+                  Center(child: Text('No Rental Request'));
+                }
 
                 return RefreshIndicator(
                   onRefresh: productVM.getAllNotification,
@@ -210,77 +225,125 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                                   padding: const EdgeInsets.only(
                                       top: 14, bottom: 10),
                                   child: Center(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        print(req
-                                            .renterRequestID!.renterID!.sId!);
-                                        chatVM.chartStart(
-                                            otherUserId: req.renterRequestID!
-                                                .renterID!.sId!,
-                                            context: context,
-                                            image: req.renterRequestID?.renterID
-                                                    ?.fullName ??
-                                                "",
-                                            name: req.renterRequestID?.renterID
-                                                    ?.fullName ??
-                                                "");
-
-                                        // Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //       builder: (context) => ChatScreen(
-                                        //           // conversationId: id,
-                                        //           conversationId: chatVM
-                                        //               .conversationModel!.id
-                                        //           // conversationId,
-                                        //           ,
-                                        //           fullName: chatVM
-                                        //               .conversationModel!
-                                        //               .participant
-                                        //               .fullName,
-                                        //           imageUrl: chatVM
-                                        //               .conversationModel
-                                        //               !
-                                        //               .participant
-                                        //               .profilePicture),
-                                        //     ));
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        minimumSize: Size(double.infinity, 40),
-                                        backgroundColor: Colors.blue[400],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Icon(
-                                            Icons.check_circle_outline_rounded,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text("Accepted",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  letterSpacing: 2,
-                                                  color: Colors.white)),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Icon(
-                                              Icons.message_rounded,
-                                              color: Colors.white,
+                                    child: Column(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            // Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //       builder: (context) => ChatScreen(
+                                            //           // conversationId: id,
+                                            //           conversationId: chatVM
+                                            //               .conversationModel!.id
+                                            //           // conversationId,
+                                            //           ,
+                                            //           fullName: chatVM
+                                            //               .conversationModel!
+                                            //               .participant
+                                            //               .fullName,
+                                            //           imageUrl: chatVM
+                                            //               .conversationModel
+                                            //               !
+                                            //               .participant
+                                            //               .profilePicture),
+                                            //     ));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize:
+                                                Size(double.infinity, 40),
+                                            backgroundColor: Colors.blue[400],
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons
+                                                    .check_circle_outline_rounded,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text("Accepted",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      letterSpacing: 2,
+                                                      color: Colors.white)),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              print(req.renterRequestID!
+                                                  .renterID!.sId!);
+                                              chatVM.chartStart(
+                                                  otherUserId: req
+                                                      .renterRequestID!
+                                                      .renterID!
+                                                      .sId!,
+                                                  context: context,
+
+image: "${ApiClient.baseImageUrl}+${imageVM.profilePicture}",
+
+                                                  // image: req
+                                                  //         .renterRequestID
+                                                  //         ?.renterID
+                                                  //         ?.fullName ??
+                                                  //     "",
+                                                  name: req
+                                                          .renterRequestID
+                                                          ?.renterID
+                                                          ?.fullName ??
+                                                      "");
+
+                                              // print(req.owner!.id);
+                                              // chatVM.chartStart(
+                                              //     context: context,
+                                              //     otherUserId: req.owner!.id!,
+                                              //     image:
+                                              //         req.owner?.fullName ?? "",
+                                              //     name: req.owner?.fullName ??
+                                              //         "");
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              minimumSize:
+                                                  Size(double.infinity, 40),
+                                              backgroundColor:
+                                                  Colors.green[400],
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .chat_bubble_outline_rounded,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text("Lets Start Conversation",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        letterSpacing: 2,
+                                                        color: Colors.white)),
+                                              ],
+                                            )),
+                                      ],
                                     ),
                                   ),
                                 )

@@ -34,7 +34,7 @@ class ProductCard extends StatelessWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
             child: Image.network(
               '${ApiClient.baseImageUrl}${product.image}',
-              height: 160,
+              height: 180,
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
@@ -85,7 +85,7 @@ class ProductCard extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onView,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey.shade600,
+                      backgroundColor: Colors.grey.shade500,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),

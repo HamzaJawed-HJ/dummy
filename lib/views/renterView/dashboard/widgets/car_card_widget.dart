@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 
 class CarCard extends StatelessWidget {
@@ -10,9 +11,9 @@ class CarCard extends StatelessWidget {
   final bool isFeatured;
   final bool isInsured;
   final double? width, imageHeight;
-   void Function()? onClick;
+  void Function()? onClick;
 
-   CarCard(
+  CarCard(
       {super.key,
       required this.imageUrl,
       required this.title,
@@ -47,7 +48,8 @@ class CarCard extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12)),
                 child: Container(
                   child: Image.network(
                     "${ApiClient.baseImageUrl}$imageUrl",
@@ -58,7 +60,8 @@ class CarCard extends StatelessWidget {
                       height: 160,
                       width: double.infinity,
                       color: Colors.grey[200],
-                      child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                      child: Icon(Icons.broken_image,
+                          size: 60, color: Colors.grey),
                     ),
                   ),
                 ),
@@ -68,7 +71,8 @@ class CarCard extends StatelessWidget {
                   top: 8,
                   left: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(4),
@@ -84,7 +88,8 @@ class CarCard extends StatelessWidget {
                   top: 8,
                   left: 85,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(4),
@@ -102,15 +107,27 @@ class CarCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                Text(title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18)),
                 Text(variant, style: const TextStyle(color: Colors.grey)),
                 const SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(city),
-                    Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      city,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    Text(price,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: blueColor)),
                   ],
+                ),
+                SizedBox(
+                  height: 6,
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -118,12 +135,16 @@ class CarCard extends StatelessWidget {
                     onPressed: onClick,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Rent Now", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text("Rent Now",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
                         Icon(
                           Icons.arrow_forward_ios_rounded,
                           color: Colors.white,

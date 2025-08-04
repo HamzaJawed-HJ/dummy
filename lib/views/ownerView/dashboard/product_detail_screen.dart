@@ -33,9 +33,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     print(widget.product.id);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade500,
         title: Text(
           "Product Details",
+          style: const TextStyle(
+            fontSize: 20,
+            wordSpacing: 2,
+            fontWeight: FontWeight.bold,
+            // color: blueColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -57,81 +62,103 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.product?.name ?? "", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  Text(widget.product?.name ?? "",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
-                  Text("Rs ${widget.product?.price} / ${widget.product?.timePeriod}", style: TextStyle(fontSize: 18, color: Colors.blue.shade700)),
+                  Text(
+                      "Rs ${widget.product?.price} / ${widget.product?.timePeriod}",
+                      style:
+                          TextStyle(fontSize: 18, color: Colors.blue.shade700)),
                   SizedBox(height: 16),
-                  _infoRow(Icons.category, "Category", widget.product?.category ?? ""),
-                  _infoRow(Icons.location_on, "Location", widget.product?.location ?? ""),
-                  _infoRow(Icons.timer, "Rental Period", widget.product?.timePeriod ?? ""),
+                  _infoRow(Icons.category, "Category",
+                      widget.product?.category ?? ""),
+                  _infoRow(Icons.location_on, "Location",
+                      widget.product?.location ?? ""),
+                  _infoRow(Icons.timer, "Rental Period",
+                      widget.product?.timePeriod ?? ""),
                   SizedBox(height: 16),
-                  Text("Description", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text("Description",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   SizedBox(height: 4),
                   Text(widget.product?.description ?? ""),
                   SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton.icon(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                        label: Text(
-                          "Edit Product",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProductScreen(
-                                  obj: widget.product!,
-                                ),
-                              ));
-                        },
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                      ),
-                      ElevatedButton.icon(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                        label: Text(
-                          "Delete Product",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: Text("Confirm Deletion"),
-                              content: Text("Are you sure you want to delete this product?"),
-                              actions: [
-                                TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text("Cancel")),
-                                TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text("Delete")),
-                              ],
-                            ),
-                          );
-
-                          if (confirmed == true) {
-                            try {
-                              await Provider.of<ProductViewModel>(context, listen: false).deleteProduct(widget.product.id, context);
-
-                              Navigator.pop(context); // Navigate back after successful deletion
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Failed to delete product')),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red.shade600),
-                      ),
-                    ],
-                  )
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton.icon(
+              icon: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Edit Product",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProductScreen(
+                        obj: widget.product!,
+                      ),
+                    ));
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+            ),
+            ElevatedButton.icon(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Delete Product",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text("Confirm Deletion"),
+                    content:
+                        Text("Are you sure you want to delete this product?"),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: Text("Cancel")),
+                      TextButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: Text("Delete")),
+                    ],
+                  ),
+                );
+
+                if (confirmed == true) {
+                  try {
+                    await Provider.of<ProductViewModel>(context, listen: false)
+                        .deleteProduct(widget.product.id, context);
+
+                    Navigator.pop(
+                        context); // Navigate back after successful deletion
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to delete product')),
+                    );
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade600),
             ),
           ],
         ),

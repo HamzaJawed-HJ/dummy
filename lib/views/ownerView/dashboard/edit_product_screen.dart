@@ -57,9 +57,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
         centerTitle: true,
         title: Text(
           'Edit Product',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(
+            fontSize: 20,
+            wordSpacing: 2,
+            fontWeight: FontWeight.bold,
+            // color: blueColor,
+          ),
         ),
-        backgroundColor: Colors.blue[800],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -68,7 +72,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              SizedBox(height: 10),
 
               Center(
                 child: GestureDetector(
@@ -89,19 +93,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                   height: 160,
                                   width: double.infinity,
                                   color: Colors.grey[200],
-                                  child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                                  child: Icon(Icons.broken_image,
+                                      size: 60, color: Colors.grey),
                                 ),
                               )
                             : Image.file(File(_image!), fit: BoxFit.cover)
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Icon(Icons.add_a_photo, size: 40, color: Colors.blue), SizedBox(height: 10), Text("Add Product Photo")],
+                            children: [
+                              Icon(Icons.add_a_photo,
+                                  size: 40, color: Colors.blue),
+                              SizedBox(height: 10),
+                              Text("Add Product Photo")
+                            ],
                           ),
                   ),
                 ),
               ),
               SizedBox(height: 20),
-              ContainerText(padding: EdgeInsets.zero, stringText: "Product Name"),
+              ContainerText(
+                  padding: EdgeInsets.zero, stringText: "Product Name"),
 
               CustomInputField(
                 title: "Enter product name",
@@ -142,7 +153,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              ContainerText(padding: EdgeInsets.zero, stringText: "Description"),
+              ContainerText(
+                  padding: EdgeInsets.zero, stringText: "Description"),
 
               CustomInputField(
                 maxLine: 4,
@@ -170,7 +182,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 height: 20,
               ),
 
-              ContainerText(padding: EdgeInsets.zero, stringText: "Days for Rent"),
+              ContainerText(
+                  padding: EdgeInsets.zero, stringText: "Days for Rent"),
 
               CustomInputField(
                 title: "Enter Days for rent",
@@ -183,73 +196,66 @@ class _EditProductScreenState extends State<EditProductScreen> {
               SizedBox(
                 height: 20,
               ),
-              InkWell(
-                onTap: () {
-                  // String? accessToken = await SessionManager.getAccessToken();
-                  // Map<String, String?> userInfo =
-                  //     await SessionManager.getUserInfo();
-
-                  // final location = userInfo['area'];
-
-                  // print("Print LOcation" + location.toString());
-
-//                  print(userInfo['area']);
-
-                  // inside your form submit button:
-                  if (_formKey.currentState!.validate() && _image != null && selectedCategory != null) {
-                    print("category " + selectedCategory!);
-                    print("image path " + _image!);
-                    productVM.editProduct(
-                      productId: widget.obj.id,
-                      category: selectedCategory!.trim(),
-                      name: nameController.text.trim(),
-                      description: descriptionController.text.trim(),
-                      price: priceController.text.trim(),
-                      timePeriod: rentForDaysController.text.trim(),
-                      imageFile: _image!,
-                      context: context,
-                    );
-                    // Future.delayed(
-                    //   Duration(seconds: 1),
-                    //   () {
-                    //   },
-                    // );
-
-                    // print(productVM.)
-                  } else {
-                    HelperFunctions.showErrorSnackbar(context, 'Please fill all fields and select an image.');
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 55,
-                  decoration: BoxDecoration(color: Colors.blue.shade600, borderRadius: BorderRadius.circular(14)),
-                  child: productVM.isLoading
-                      ? CircularProgressIndicator(
-                          strokeWidth: 4,
-                          color: Colors.white,
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Submit",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                ),
-              ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        child: SizedBox(
+          height: 60,
+          child: InkWell(
+            onTap: () {
+              if (_formKey.currentState!.validate() &&
+                  _image != null &&
+                  selectedCategory != null) {
+                print("category " + selectedCategory!);
+                print("image path " + _image!);
+                productVM.editProduct(
+                  productId: widget.obj.id,
+                  category: selectedCategory!.trim(),
+                  name: nameController.text.trim(),
+                  description: descriptionController.text.trim(),
+                  price: priceController.text.trim(),
+                  timePeriod: rentForDaysController.text.trim(),
+                  imageFile: _image!,
+                  context: context,
+                );
+              } else {
+                HelperFunctions.showErrorSnackbar(
+                    context, 'Please fill all fields and select an image.');
+              }
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: 55,
+              decoration: BoxDecoration(
+                  color: Colors.blue.shade600,
+                  borderRadius: BorderRadius.circular(14)),
+              child: productVM.isLoading
+                  ? CircularProgressIndicator(
+                      strokeWidth: 4,
+                      color: Colors.white,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ),

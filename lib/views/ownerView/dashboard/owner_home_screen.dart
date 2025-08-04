@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/edit_product_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/meaasages_view.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/product_detail_screen.dart';
@@ -27,25 +29,45 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
     // final productProvider =
     //     Provider.of<PVM>(context, listen: false);
     // final products = productProvider.products;
+    final v = Provider.of<UserProfileViewModel>(context);
 
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70,
           leading: SizedBox.shrink(),
-          centerTitle: true,
-          backgroundColor: Colors.blue.shade700,
-          title: Text(
-            "Welcome back!",
-            style: TextStyle(color: Colors.white),
+          // centerTitle: true,
+          // backgroundColor: Colors.blue.shade700,
+          title: Row(
+            children: [
+              const Text(
+                "Welcome! ",
+                style: const TextStyle(
+                  fontSize: 26,
+                  wordSpacing: 2,
+                  fontWeight: FontWeight.bold,
+                  // color: blueColor,
+                ),
+              ),
+              Text(
+                "${v.fullName ?? "Loading"}",
+                style: const TextStyle(
+                  // fontSize: 26,
+                  wordSpacing: 2,
+                  fontWeight: FontWeight.bold,
+                  color: blueColor,
+                ),
+              ),
+            ],
           ),
-          actions: [
-            InkWell(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MessagesScreen(),
-                    )),
-                child: Icon(Icons.chat))
-          ],
+          // actions: [
+          //   InkWell(
+          //       onTap: () => Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => MessagesScreen(),
+          //           )),
+          //       child: Icon(Icons.chat))
+          // ],
         ),
         body: Consumer<ProductViewModel>(
           builder: (context, value, child) => Padding(
@@ -54,11 +76,14 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildStatsRow(
-                    availableItems: value.products.length - value.rentalPendingCount,
+                    availableItems:
+                        value.products.length - value.rentalPendingCount,
                     totalItem: value.products.length,
                     rentedItem: value.rentalAccpetedCount),
                 SizedBox(height: 16),
-                Text("My Listing", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text("My Listing",
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
 
                 Expanded(
@@ -85,7 +110,8 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => ProductDetailsScreen(product: product),
+                                    builder: (_) =>
+                                        ProductDetailsScreen(product: product),
                                   ),
                                 );
                               },
@@ -146,7 +172,9 @@ Widget _statCard(String label, int count, IconData icon) {
           children: [
             Icon(icon, color: Colors.blue),
             SizedBox(height: 4),
-            if (count >= 0) Text(count.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
+            if (count >= 0)
+              Text(count.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
             Text(label, style: TextStyle(fontSize: 12)),
           ],
         ),

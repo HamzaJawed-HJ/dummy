@@ -1,6 +1,6 @@
 class ConversationModel {
   final String id;
-  final String?lastMessage;
+  final String? lastMessage;
   final String lastUpdated;
   final Participant participant;
 
@@ -14,7 +14,7 @@ class ConversationModel {
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
       id: json['id'],
-      lastMessage: json['lastMessage'] ?? 'No messages yet',
+      lastMessage: json['lastMessage'] ?? '',
       lastUpdated: json['lastUpdated'],
       participant: Participant.fromJson(json['participant']),
     );

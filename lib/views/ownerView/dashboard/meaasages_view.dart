@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/user_chat_screen.dart';
 import 'package:provider/provider.dart';
@@ -29,16 +30,18 @@ class _MessagesScreenState extends State<MessagesScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox.shrink(),
+        centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
               "My Chats",
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),
+              style: TextStyle(
+                  fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: 2),
             ),
           ],
         ),
-        scrolledUnderElevation: 0,
+        // scrolledUnderElevation: 0,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,6 +96,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 );
               }
 
+              if (chatViewmodel.conversationMessageList.isEmpty) {
+                return Center(
+                  child: Text("No Conversation Started"),
+                );
+              }
+
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: chatViewmodel.conversationMessageList.length,
@@ -110,18 +119,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                   .conversationMessageList[index]
                                   .participant
                                   .fullName,
-                              imageUrl: chatViewmodel
-                                  .conversationMessageList[index]
-                                  .participant
-                                  .profilePicture,
+                              imageUrl:
+                                  "${ApiClient.baseImageUrl}${chatViewmodel.conversationMessageList[index].participant.profilePicture}",
                             ),
                           ));
                     },
                     leading: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(
-                          'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
-                    ),
+                        radius: 30,
+                        backgroundImage: NetworkImage(
+                          '${ApiClient.baseImageUrl}${chatViewmodel.conversationMessageList[index].participant.profilePicture}',
+                          // 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                        )),
                     title: Text(
                       chatViewmodel
                           .conversationMessageList[index].participant.fullName,

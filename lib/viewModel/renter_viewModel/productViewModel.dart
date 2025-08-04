@@ -173,11 +173,7 @@ class ProductViewModel extends ChangeNotifier {
     try {
       error = null;
       final data = await ProductRepository.fetchAllNotifications();
-      _approvalList = data
-          .map((e) => RentalApprovalModel.fromJson(e))
-          .toList()
-          .reversed
-          .toList();
+      _approvalList = data.map((e) => RentalApprovalModel.fromJson(e)).toList();
     } catch (e) {
       _approvalList = [];
       error = e.toString();

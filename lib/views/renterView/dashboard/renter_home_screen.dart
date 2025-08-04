@@ -33,10 +33,10 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
           backgroundColor: Colors.transparent,
           scrolledUnderElevation: 1,
           leadingWidth: double.infinity,
-          toolbarHeight: 80,
+          toolbarHeight: 70,
           leading: ListTile(
             leading: const CircleAvatar(
-              radius: 40,
+              radius: 30,
               backgroundImage: NetworkImage(
                 "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg",
               ),
@@ -44,25 +44,26 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
             title: Text(
               "Hey, ${v.fullName ?? "Loading"}",
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 26,
                 wordSpacing: 2,
                 fontWeight: FontWeight.bold,
                 color: blueColor,
               ),
             ),
           ),
-          actions: [
-            InkWell(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MessagesScreen(),
-                    )),
-                child: Icon(Icons.chat))
-          ],
+          // actions: [
+          //   InkWell(
+          //       onTap: () => Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => MessagesScreen(),
+          //           )),
+          //       child: Icon(Icons.chat))
+          // ],
         ),
         body: RefreshIndicator(
-          onRefresh: Provider.of<ProductViewModel>(context, listen: false).getAllProducts,
+          onRefresh: Provider.of<ProductViewModel>(context, listen: false)
+              .getAllProducts,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             children: [
@@ -113,6 +114,8 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
                             },
                           ));
                         },
+                        // isFeatured: true,
+                        // isInsured: true,
                         imageHeight: 140,
                         width: double.infinity,
                         imageUrl: product.image,

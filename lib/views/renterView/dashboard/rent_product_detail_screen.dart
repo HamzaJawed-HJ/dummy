@@ -16,9 +16,14 @@ class RentProductDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade500,
         title: Text(
           "Product Details",
+          style: const TextStyle(
+            fontSize: 20,
+            wordSpacing: 2,
+            fontWeight: FontWeight.bold,
+            // color: blueColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -40,33 +45,42 @@ class RentProductDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  Text(product.name,
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
-                  Text("Rs ${product.price} / ${product.timePeriod}", style: TextStyle(fontSize: 18, color: Colors.blue.shade700)),
+                  Text("Rs ${product.price} / ${product.timePeriod}",
+                      style:
+                          TextStyle(fontSize: 18, color: Colors.blue.shade700)),
                   SizedBox(height: 16),
                   _infoRow(Icons.category, "Category", product.category),
                   _infoRow(Icons.location_on, "Location", product.location),
                   _infoRow(Icons.timer, "Rental Period", product.timePeriod),
                   SizedBox(height: 16),
-                  Text("Description", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text("Description",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   SizedBox(height: 4),
                   Text(product.description),
                   SizedBox(height: 24),
-                  Consumer<ProductViewModel>(builder: (context, viewModel, _) {
-                    return CustomAppButton(
-                      title: "Rent Now",
-                      isloading: viewModel.isLoading,
-                      onPress: () => viewModel.renteRequest(
-                        context: context,
-                        productId: product.id,
-                      ),
-                    );
-                  }),
                 ],
               ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: Consumer<ProductViewModel>(builder: (context, viewModel, _) {
+          return CustomAppButton(
+            title: "Rent Now",
+            isloading: viewModel.isLoading,
+            onPress: () => viewModel.renteRequest(
+              context: context,
+              productId: product.id,
+            ),
+          );
+        }),
       ),
     );
   }

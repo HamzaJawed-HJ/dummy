@@ -105,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
           }
 
           if (value.messagesList.isEmpty) {
-            return Center(child: Text("No messages yet..."));
+             Center(child: Text("No messages yet..."));
           }
 
           return ListView.builder(
