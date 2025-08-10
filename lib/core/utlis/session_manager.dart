@@ -99,6 +99,7 @@ class SessionManager {
   // Clear Session Data
   static Future<void> clearSession() async {
     final prefs = await SharedPreferences.getInstance();
+    
     await prefs.clear();
   }
 

@@ -10,12 +10,11 @@ import 'package:path/path.dart';
 class ApiClient {
   // static final String ipUrl = '192.168.0.34';
   // 192.168.186.226
-  static final String ipUrl = '192.168.0.36';
+  static final String ipUrl = '192.168.0.35';
   static final String baseUrl = "http://$ipUrl:3000/api";
 
   static final String baseImageUrl = "http://$ipUrl:3000/uploads/";
   static final String baseImageUrlupload = "http://$ipUrl:3000/uploads";
-
 
   // Common POST requests
   static Future<Map<String, dynamic>> post(
@@ -66,7 +65,7 @@ class ApiClient {
     }
   }
 
-static  Future<http.Response> delete(String endpoint) async {
+  static Future<http.Response> delete(String endpoint) async {
     final url = Uri.parse('$baseUrl/$endpoint');
     final token = await SessionManager.getAccessToken();
 
@@ -153,7 +152,7 @@ static  Future<http.Response> delete(String endpoint) async {
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.body.toString());
         final res = jsonDecode(response.body);
-return {'success': true, 'message': res['message'], 'data': res};
+        return {'success': true, 'message': res['message'], 'data': res};
         // return {'success': true, 'data': jsonDecode(response.body)};
         // return jsonDecode(response.body);
       } else {

@@ -27,6 +27,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   loadData() async {
     await Provider.of<UserProfileViewModel>(context, listen: false)
+        .getProfile(context: context);
+
+    await Provider.of<UserProfileViewModel>(context, listen: false)
         .loadUserData();
   }
 
@@ -86,14 +89,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 : profileViewModel.profileImage != null
                                     ? FileImage(profileViewModel.profileImage!)
                                     : null,
-                            child: profileViewModel.profilePicture != null &&
-                                    profileViewModel.profilePicture == ""
+                            child: profileViewModel.profilePicture == ""
                                 ? const Icon(
                                     Icons.person_rounded,
                                     size: 80,
                                     color: Color.fromARGB(255, 19, 111, 153),
                                   )
-                                : null,
+                                : SizedBox.shrink(),
                           ),
                         ),
                         Positioned(

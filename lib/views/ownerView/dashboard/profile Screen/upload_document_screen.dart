@@ -107,9 +107,12 @@ class UploadDocumentScreen extends StatelessWidget {
                 color: Colors.blue,
                 strokeWidth: 1.5,
                 child: GestureDetector(
-                  onTap: (profileViewModel.cnicPicture == "")
-                      ? profileVM.cnicPickImage
-                      : () {},
+                  onTap:
+                      //  (profileViewModel.cnicPicture == "")
+                      //     ?
+                      profileVM.cnicPickImage
+                  // : () {},
+                  ,
                   child: Container(
                     width: double.infinity,
                     height: 180,
@@ -165,10 +168,8 @@ class UploadDocumentScreen extends StatelessWidget {
         }),
       ),
       bottomNavigationBar: Visibility(
-        visible: (profileViewModel.cnicImage == null ||
-                profileViewModel.cnicPicture == "") &&
-            (profileViewModel.profilePicture == "" ||
-                profileViewModel.profileImage == null),
+        visible: profileViewModel.cnicPicture == "" &&
+            profileViewModel.profilePicture == "",
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           child: SizedBox(
@@ -189,6 +190,7 @@ class UploadDocumentScreen extends StatelessWidget {
                   )
                       .then(
                     (value) {
+                      profileViewModel.getProfile(context: context);
                       // profileViewModel.profileImage = null;
                       // profileViewModel.profilePicture = null;
                       // profileViewModel.cnicImage = null;
@@ -201,10 +203,15 @@ class UploadDocumentScreen extends StatelessWidget {
                   );
                 }
               },
-              child: const Text(
-                'Upload',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              child: profileViewModel.isLoading
+                  ? CircularProgressIndicator(
+                      strokeWidth: 4,
+                      color: Colors.white,
+                    )
+                  : const Text(
+                      'Upload',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
             ),
           ),
         ),

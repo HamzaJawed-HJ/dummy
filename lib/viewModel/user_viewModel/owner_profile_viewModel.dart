@@ -49,11 +49,13 @@ class OwnerProfileViewModel extends ChangeNotifier {
   }
 
   // Logout functionality
-  Future<void> logout(BuildContext context) async {
-    await SessionManager.clearSession(); // Clear session data
-    Navigator.pushReplacementNamed(
-        context, RoutesName.renterLoginScreen); // Navigate to the login screen
-  }
+  // Future<void> logout(BuildContext context) async {
+  //     final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('profilePicture', "");
+  //   await SessionManager.clearSession(); // Clear session data
+  //   Navigator.pushReplacementNamed(
+  //       context, RoutesName.renterLoginScreen); // Navigate to the login screen
+  // }
 
   File? cnicImage;
   final picker = ImagePicker();
@@ -142,4 +144,5 @@ class OwnerProfileViewModel extends ChangeNotifier {
       );
     }
   }
+
 }

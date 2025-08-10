@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -29,6 +30,14 @@ class UserProfileViewModel extends ChangeNotifier {
   String? get area => _area;
   String? get cnic => _cnic;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  void _setLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
   // Method to load user data from session
   Future<void> loadUserData() async {
     final userInfo = await SessionManager.getUserInfo();
@@ -44,16 +53,23 @@ class UserProfileViewModel extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild the UI
   }
 
+  File? cnicImage;
+  File? profileImage;
+  final picker = ImagePicker();
+
   // Logout functionality
   Future<void> logout(BuildContext context) async {
-    await SessionManager.clearSession(); // Clear session data
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profilePicture', "");
+
+    await SessionManager.clearSession();
+
+    profileImage = null;
+    cnicImage = null;
+    // Clear session data
     Navigator.pushReplacementNamed(
         context, RoutesName.renterLoginScreen); // Navigate to the login screen
   }
-
-  File? cnicImage;
-  final picker = ImagePicker();
-  File? profileImage;
 
   // Pick from gallery for profile
   Future<void> pickProfileImage() async {
@@ -68,6 +84,9 @@ class UserProfileViewModel extends ChangeNotifier {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       cnicImage = File(pickedFile.path);
+      log(cnicImage!.path);
+      log("split image path ${cnicImage!.path.split('/cache/')[1]}");
+
       notifyListeners();
     }
   }
@@ -77,6 +96,7 @@ class UserProfileViewModel extends ChangeNotifier {
     required File? cnicImage,
     required BuildContext context,
   }) async {
+    _setLoading(true);
     final response = await ApiClient.multipartUpload(
       endpoint: role == 'owner'
           ?
@@ -94,6 +114,8 @@ class UserProfileViewModel extends ChangeNotifier {
       },
       isToken: true,
     );
+
+    _setLoading(false);
 
     if (response['success'] == true) {
       final prefs = await SharedPreferences.getInstance();
@@ -209,32 +231,35 @@ class UserProfileViewModel extends ChangeNotifier {
     }
   }
 
-// Future<void> getAllConversations() async {
-//     try {
+  Future<void> getProfile({
+    required BuildContext context,
+  }) async {
+    final response = await ApiClient.get(
+        role == 'owner' ? "/users/profile" : "/users/profile-renter",
+        isToken: true);
 
-//       final response = await ApiClient.get(
+    if (response['success'] == true) {
+      log(response.toString());
+      log(response['message']['user']['profilePicture']);
+      log(response['message']['user']['fullName']);
+      log(response['message']['user']['role']);
 
-// "/users/profile"
-// ,
-//         isToken:true ,
+      final prefs = await SharedPreferences.getInstance();
 
-//       );
+      await prefs.setString(
+          'profilePicture', response['message']['user']['profilePicture']);
+      await prefs.setString(
+          'cnicPicture', response['message']['user']['cnicPicture']);
+      await prefs.setString('fullName', fullName ?? "");
+      await prefs.setString('role', role ?? "");
 
-//       if (response.statusCode == 200) {
-//         final List<dynamic> data = jsonDecode(response.body);
-//         conversationMessageList =
-//             data.map((json) => ConversationModel.fromJson(json)).toList();
-
-//         print(data.toString());
-//         notifyListeners();
-//         _setLoading(false);
-//       } else {
-//         throw Exception(
-//             'Failed to fetch conversations: ${response.statusCode}');
-//       }
-//     } catch (e) {
-//       debugPrint('Error in getAllConversations: $e');
-//       rethrow;
-//     }
-//   }
+      // await HelperFunctions.showSuccessSnackbar(context, 'Upload successful');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(response['message'] ??
+                'Didnt get detail , SOmething went wrong ')),
+      );
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/utlis/validator.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_auth_viewModel.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/renterView/auth/renter_signUp_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
@@ -35,7 +36,12 @@ class _RenterLoginScreenState extends State<RenterLoginScreen> {
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       context: context,
+    )        .then(
+      (value)async {
+       await Provider.of<UserProfileViewModel>(context, listen: false).getProfile(context: context);
+      },
     );
+;
   }
 
   @override

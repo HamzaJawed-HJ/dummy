@@ -4,6 +4,7 @@ import 'package:fyp_renterra_frontend/core/utlis/validator.dart';
 import 'package:fyp_renterra_frontend/generic_widgets/custom_app_button.dart';
 import 'package:fyp_renterra_frontend/generic_widgets/custom_input_field_widget.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/user_viewModel/user_auth_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/auth/user_signUp_screen.dart';
 import 'package:provider/provider.dart';
@@ -30,10 +31,16 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
   void _submitForm(UserAuthViewModel viewModel) async {
     if (!_formKey.currentState!.validate()) return;
 
-    await viewModel.loginUser(
+    await viewModel
+        .loginUser(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       context: context,
+    )
+        .then(
+      (value)async {
+       await Provider.of<UserProfileViewModel>(context, listen: false).getProfile(context: context);
+      },
     );
   }
 
