@@ -3,6 +3,7 @@ import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/agreement_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyRequestsScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
         centerTitle: true,
         leading: SizedBox.shrink(),
         title: const Text(
-          'My Requests',
+          'My Requestsrdfyug',
           style: TextStyle(
             fontSize: 26,
             wordSpacing: 2,
@@ -258,6 +259,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                             //               .profilePicture),
                                             //     ));
                                           },
+                                          //confirmed button
                                           style: ElevatedButton.styleFrom(
                                             minimumSize:
                                                 Size(double.infinity, 40),
@@ -293,6 +295,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                         SizedBox(
                                           height: 10,
                                         ),
+                                        //chat start button
                                         ElevatedButton(
                                             onPressed: () {
                                               print(req.owner!.id);
@@ -330,6 +333,49 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                                   width: 10,
                                                 ),
                                                 Text("Lets Start Conversation",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        letterSpacing: 2,
+                                                        color: Colors.white)),
+                                              ],
+                                            )),
+                                        //aggrement  button
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AgreementDetailScreen(),
+                                                  ));
+
+                                              // print(req.owner!.id);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              minimumSize:
+                                                  Size(double.infinity, 40),
+                                              backgroundColor:
+                                                  Colors.amber[600],
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.document_scanner,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text("Generate Agreement",
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         letterSpacing: 2,

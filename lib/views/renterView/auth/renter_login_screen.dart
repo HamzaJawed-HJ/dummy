@@ -36,11 +36,12 @@ class _RenterLoginScreenState extends State<RenterLoginScreen> {
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       context: context,
-    )        .then(
-      (value)async {
-       await Provider.of<UserProfileViewModel>(context, listen: false).getProfile(context: context);
-      },
-    );
+    ) 
+    //        .then(
+    //   (value)async {
+    //    await Provider.of<UserProfileViewModel>(context, listen: false).getProfile(context: context);
+    //   },
+    // );
 ;
   }
 

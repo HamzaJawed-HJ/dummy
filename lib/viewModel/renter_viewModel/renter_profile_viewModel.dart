@@ -61,6 +61,7 @@ class UserProfileViewModel extends ChangeNotifier {
   Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('profilePicture', "");
+    // await prefs.setString('token', "");
 
     await SessionManager.clearSession();
 

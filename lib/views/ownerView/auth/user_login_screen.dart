@@ -31,17 +31,16 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
   void _submitForm(UserAuthViewModel viewModel) async {
     if (!_formKey.currentState!.validate()) return;
 
-    await viewModel
-        .loginUser(
+    await viewModel.loginUser(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       context: context,
-    )
-        .then(
-      (value)async {
-       await Provider.of<UserProfileViewModel>(context, listen: false).getProfile(context: context);
-      },
     );
+    //     .then(
+    //   (value)async {
+    //    await Provider.of<UserProfileViewModel>(context, listen: false).getProfile(context: context);
+    //   },
+    // );
   }
 
   @override

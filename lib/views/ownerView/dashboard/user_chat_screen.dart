@@ -31,14 +31,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    super.initState();
     startRepeatingApiCall();
+    super.initState();
   }
 
   void startRepeatingApiCall() {
     _timer = Timer.periodic(const Duration(seconds: 5), (_) => apiCall());
     apiCall(); // Call once at start
   }
+
+  // void apiCall() async {
+  //   await Provider.of<ChatViewModel>(context, listen: false).getAllMessages(
+  //     conversationId: widget.conversationId!,
+  //     isload: loader,
+  //   );
+  //   loader = false;
+  // }
 
   void apiCall() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -66,9 +74,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
+    super.dispose();
+
     chatViewmodel?.messagesList.clear();
     _timer.cancel();
-    super.dispose();
   }
 
   @override
@@ -105,7 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
           }
 
           if (value.messagesList.isEmpty) {
-             Center(child: Text("No messages yet..."));
+            Center(child: Text("No messages yet..."));
           }
 
           return ListView.builder(
@@ -118,19 +127,51 @@ class _ChatScreenState extends State<ChatScreen> {
 
               return Align(
                 alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: isMe ? Colors.blue : Color(0xFFE1E1E2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    msg.message!,
-                    style: TextStyle(
-                      color: isMe ? Colors.white : Colors.black,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isMe ? Colors.blue : Color(0xFFE1E1E2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        msg.message!,
+                        style: TextStyle(
+                          color: isMe ? Colors.white : Colors.black,
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 70,
+                      child: Align(
+                        alignment:
+                            isMe ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              msg.seen! ? "seen" : "unseen",
+                              style: TextStyle(
+                                color: msg.seen! ? Colors.blue : Colors.black,
+                              ),
+                            ),
+                            Icon(
+                              isMe
+                                  ? Icons.check_circle_outline_outlined
+                                  : Icons.check_circle_rounded,
+                              size: 20,
+                              grade: 10,
+                              color: msg.seen! ? Colors.blue : Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
