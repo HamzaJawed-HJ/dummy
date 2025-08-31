@@ -10,10 +10,13 @@ import 'package:path/path.dart';
 class ApiClient {
   // static final String ipUrl = '192.168.0.34';
   // 192.168.186.226
-  static final String ipUrl = '192.168.0.40';
+  static final String ipUrl = '192.168.0.34';
   static final String baseUrl = "http://$ipUrl:3000/api";
 
   static final String baseImageUrl = "http://$ipUrl:3000/uploads/";
+  
+  static final String basepdfUrl = "http://$ipUrl:3000";
+
   static final String baseImageUrlupload = "http://$ipUrl:3000/uploads";
 
   // Common POST requests

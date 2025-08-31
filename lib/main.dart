@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/routes/app_router.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
 import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/agreement_detail_viewmodel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_auth_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_dashboard_viewModel.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductViewModel()),
         ChangeNotifierProvider(create: (_) => ChatViewModel()),
         ChangeNotifierProvider(create: (_) => OwnerProfileViewModel()),
+        ChangeNotifierProvider(create: (_) => AgreementDetailViewModel()),
 
         
       ],

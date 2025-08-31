@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/chat_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/agreement_detail_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/all_agreement_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyRequestsScreen extends StatefulWidget {
@@ -55,6 +58,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
             // color: blueColor,
           ),
         ),
+
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -345,11 +349,14 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                         ),
                                         ElevatedButton(
                                             onPressed: () {
+                                              log(req.id!);
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        AgreementDetailScreen(),
+                                                        AgreementDetailScreen(
+                                                      rentalRequestId: req.id!,
+                                                    ),
                                                   ));
 
                                               // print(req.owner!.id);

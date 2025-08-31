@@ -175,6 +175,9 @@ void searchProducts(String query) {
     }
   }
 
+
+
+
   Future<void> getAllRequest() async {
     try {
       error = null;
@@ -322,4 +325,14 @@ void searchProducts(String query) {
       HelperFunctions.showErrorSnackbar(context, response['message']);
     }
   }
+
+
+//aggrement work 
+
+  RequestModel getRequestById(String id) {
+    return _request.firstWhere((prod) => prod.id == id);
+  }
+
+
+
 }

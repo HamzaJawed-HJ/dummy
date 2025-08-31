@@ -5,6 +5,7 @@ import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/meaasages_view.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/all_agreement_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/rent_product_detail_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/widgets/car_card_widget.dart';
 import 'package:provider/provider.dart';
@@ -55,15 +56,18 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
                 ),
               ),
             ),
-            // actions: [
-            //   InkWell(
-            //       onTap: () => Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => MessagesScreen(),
-            //           )),
-            //       child: Icon(Icons.chat))
-            // ],
+            actions: [
+              IconButton(
+                icon: Icon(Icons.description_outlined,
+                    size: 28, color: Colors.blue),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllAgreementScreen()));
+                },
+              ),
+            ],
           ),
           body: RefreshIndicator(
             onRefresh: Provider.of<ProductViewModel>(context, listen: false)

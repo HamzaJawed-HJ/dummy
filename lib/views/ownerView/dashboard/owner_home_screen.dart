@@ -7,6 +7,7 @@ import 'package:fyp_renterra_frontend/views/ownerView/dashboard/meaasages_view.d
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/product_detail_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/user_chat_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/widgets/product_card.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/all_agreement_screen.dart';
 import 'package:provider/provider.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
@@ -59,15 +60,18 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
               ),
             ],
           ),
-          // actions: [
-          //   InkWell(
-          //       onTap: () => Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => MessagesScreen(),
-          //           )),
-          //       child: Icon(Icons.chat))
-          // ],
+          actions: [
+            IconButton(
+              icon: Icon(Icons.description_outlined,
+                  size: 28, color: Colors.blue),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AllAgreementScreen()));
+              },
+            ),
+          ],
         ),
         body: Consumer<ProductViewModel>(
           builder: (context, value, child) => Padding(
