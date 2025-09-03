@@ -69,7 +69,6 @@ class ProductViewModel extends ChangeNotifier {
 
   List<ProductModel> _allProducts = []; // for search
 
-
   Future<void> getMyProducts() async {
     try {
       error = null;
@@ -90,37 +89,34 @@ class ProductViewModel extends ChangeNotifier {
 
 //-------------
 
+  Future<void> getAllProducts() async {
+    try {
+      error = null;
+      final data = await ProductRepository.fetchAllProducts();
+      _allProducts =
+          data.map((e) => ProductModel.fromJson(e)).toList().reversed.toList();
+      _products = List.from(_allProducts); // start with all products
+    } catch (e) {
+      _products = [];
+      _allProducts = [];
+      error = e.toString();
+    } finally {
+      notifyListeners();
+    }
+  }
 
-Future<void> getAllProducts() async {
-  try {
-    error = null;
-    final data = await ProductRepository.fetchAllProducts();
-    _allProducts = data.map((e) => ProductModel.fromJson(e)).toList().reversed.toList();
-    _products = List.from(_allProducts); // start with all products
-  } catch (e) {
-    _products = [];
-    _allProducts = [];
-    error = e.toString();
-  } finally {
+  void searchProducts(String query) {
+    if (query.isEmpty) {
+      _products = List.from(_allProducts);
+    } else {
+      _products = _allProducts.where((p) {
+        return p.name.toLowerCase().contains(query.toLowerCase()) ||
+            p.category.toLowerCase().contains(query.toLowerCase()) ||
+            p.location.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    }
     notifyListeners();
   }
-}
-
-
-void searchProducts(String query) {
-  if (query.isEmpty) {
-    _products = List.from(_allProducts);
-  } else {
-    _products = _allProducts.where((p) {
-      return p.name.toLowerCase().contains(query.toLowerCase()) ||
-             p.category.toLowerCase().contains(query.toLowerCase()) ||
-             p.location.toLowerCase().contains(query.toLowerCase());
-    }).toList();
-  }
-  notifyListeners();
-}
-
-
 
   // Future<void> getAllProducts() async {
   //   try {
@@ -174,9 +170,6 @@ void searchProducts(String query) {
       notifyListeners();
     }
   }
-
-
-
 
   Future<void> getAllRequest() async {
     try {
@@ -326,13 +319,9 @@ void searchProducts(String query) {
     }
   }
 
-
-//aggrement work 
-
-  RequestModel getRequestById(String id) {
-    return _request.firstWhere((prod) => prod.id == id);
+  void clearallList() {
+    _approvalList.clear();
+    _request.clear();
+    _products.clear();
   }
-
-
-
 }

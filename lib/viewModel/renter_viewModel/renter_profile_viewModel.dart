@@ -7,7 +7,9 @@ import 'package:fyp_renterra_frontend/core/utlis/helper_functions.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileViewModel extends ChangeNotifier {
@@ -64,6 +66,8 @@ class UserProfileViewModel extends ChangeNotifier {
     // await prefs.setString('token', "");
 
     await SessionManager.clearSession();
+
+    Provider.of<ProductViewModel>(context, listen: false).clearallList();
 
     profileImage = null;
     cnicImage = null;

@@ -26,6 +26,14 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
   }
 
   @override
+  void dispose() {
+    //  Provider.of<ProductViewModel>(  context, listen: false).clearallList();
+
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // final productProvider =
     //     Provider.of<PVM>(context, listen: false);

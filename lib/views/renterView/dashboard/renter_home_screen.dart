@@ -94,27 +94,6 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
                     ),
                   ),
                 ),
-
-                // const SizedBox(
-                //   height: 50,
-                //   child: SearchBar(
-
-                //     leading: Padding(
-                //       padding: EdgeInsets.all(12.0),
-                //       child: Icon(Icons.search),
-                //     ),
-                //     hintText: "Search....",
-                //     backgroundColor: MaterialStatePropertyAll(
-                //       Color.fromARGB(255, 243, 243, 243),
-                //     ),
-                //     trailing: [
-                //       Padding(
-                //         padding: EdgeInsets.all(8.0),
-                //         child: Icon(Icons.tune),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 const SizedBox(height: 10),
                 const Text(
                   "All Rental Cars",
@@ -135,6 +114,7 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
                       children: productVM.products.map((product) {
                         return CarCard(
                           onClick: () {
+                            log("owner  ID: ${product.ownerID}");
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
                                 return RentProductDetailsScreen(

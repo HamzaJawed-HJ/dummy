@@ -229,25 +229,7 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
-                                            // Navigator.push(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //       builder: (context) => ChatScreen(
-                                            //           // conversationId: id,
-                                            //           conversationId: chatVM
-                                            //               .conversationModel!.id
-                                            //           // conversationId,
-                                            //           ,
-                                            //           fullName: chatVM
-                                            //               .conversationModel!
-                                            //               .participant
-                                            //               .fullName,
-                                            //           imageUrl: chatVM
-                                            //               .conversationModel
-                                            //               !
-                                            //               .participant
-                                            //               .profilePicture),
-                                            //     ));
+                                           
                                           },
                                           style: ElevatedButton.styleFrom(
                                             minimumSize:

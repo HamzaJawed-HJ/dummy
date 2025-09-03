@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
+import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/routes/route_names.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:provider/provider.dart';
@@ -22,21 +23,29 @@ class _SplashScreenState extends State<SplashScreen> {
   void onload() async {
     final profileVM = Provider.of<UserProfileViewModel>(context, listen: false);
     await profileVM.loadUserData();
+
     // ProfileViewModel obj=Provider.of(<ProfileViewModel>context,listen: false);
     //
-    final token = await SessionManager.getAccessToken();
-    // Navigate after 3 seconds to onboarding or home
-    Future.delayed(const Duration(seconds: 5), () {
-      if (token == null) {
-        Navigator.pushReplacementNamed(context, RoutesName.onboardingScreen1);
-      } else {
+    // final token = await SessionManager.getAccessToken();
+
+    final response = await ApiClient.get(
+        profileVM.role == 'owner' ? "/users/profile" : "/users/profile-renter",
+        isToken: true);
+    if (response['success'] == true) {
+      Future.delayed(const Duration(seconds: 5), () {
         if (profileVM.role == "owner") {
-          Navigator.pushReplacementNamed(context, RoutesName.renterDashboardScreen);
+          Navigator.pushReplacementNamed(
+              context, RoutesName.renterDashboardScreen);
         } else {
-          Navigator.pushReplacementNamed(context, RoutesName.UserDashboardScreen);
+          Navigator.pushReplacementNamed(
+              context, RoutesName.UserDashboardScreen);
         }
-      }
-    });
+      });
+    } else {
+      Navigator.pushReplacementNamed(context, RoutesName.onboardingScreen1);
+    }
+
+    // Navigate after 3 seconds to onboarding or home
   }
 
   @override

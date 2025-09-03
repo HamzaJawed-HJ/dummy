@@ -10,6 +10,10 @@ class AgreementDetailViewModel extends ChangeNotifier {
   DateTime? returnDate;
   List<dynamic> agreements = [];
 
+  Set<String> loadingAgreements = {};
+
+  bool isStatusLoading = false;
+
   /// Fetch agreement detail from API
   Future<void> fetchDetail(String rentalRequestId) async {
     try {
@@ -143,35 +147,38 @@ class AgreementDetailViewModel extends ChangeNotifier {
     }
   }
 
-  // Future<void> fetchAgreements() async {
-  //   try {
-  //     isLoading = true;
-  //     errorMessage = null;
-  //     notifyListeners();
-
-  //     final response = await ApiClient.get("/agreements/", isToken: true);
-
-  //     if (response['success'] == true) {
-  //       agreements = response['agreements'] as List<dynamic>;
-
-  //       print("Agreements length: ${agreements.length}");
-  //       print(agreements);
-  //     } else {
-  //       errorMessage = "Failed to load agreements";
-  //     }
-  //   } catch (e) {
-  //     errorMessage = e.toString();
-  //   } finally {
-  //     isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
-
-  String formatDate(String date) {
+  Future<void> agreementStatusChange(String agreementId) async {
     try {
-      return DateFormat("dd MMM yyyy").format(DateTime.parse(date));
+      loadingAgreements.add(agreementId);
+      notifyListeners();
+
+      final response = await ApiClient.put(
+        "/agreements/$agreementId/complete",
+        {},
+        isToken: true,
+      );
+
+      if (response['success'] == true) {
+        final index = agreements.indexWhere((a) => a['_id'] == agreementId);
+        if (index != -1) {
+          agreements[index]['status'] = 'completed';
+        }
+      } else {
+        errorMessage = response['message'] ?? "Failed to update status";
+      }
     } catch (e) {
-      return date;
+      errorMessage = "Error: $e";
+    } finally {
+      loadingAgreements.remove(agreementId);
+      notifyListeners();
     }
+  }
+}
+
+String formatDate(String date) {
+  try {
+    return DateFormat("dd MMM yyyy").format(DateTime.parse(date));
+  } catch (e) {
+    return date;
   }
 }
