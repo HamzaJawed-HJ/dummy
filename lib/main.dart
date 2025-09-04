@@ -7,6 +7,7 @@ import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewMode
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_auth_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_dashboard_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
+import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/review_viewmodel.dart';
 import 'package:fyp_renterra_frontend/viewModel/user_viewModel/owner_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/user_viewModel/user_auth_viewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/user_viewModel/user_dashboard_viewModel.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChatViewModel()),
         ChangeNotifierProvider(create: (_) => OwnerProfileViewModel()),
         ChangeNotifierProvider(create: (_) => AgreementDetailViewModel()),
+        ChangeNotifierProvider(create: (_) => ReviewViewmodel()),
 
         
       ],

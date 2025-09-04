@@ -14,7 +14,7 @@ class ApiClient {
   static final String baseUrl = "http://$ipUrl:3000/api";
 
   static final String baseImageUrl = "http://$ipUrl:3000/uploads/";
-  
+
   static final String basepdfUrl = "http://$ipUrl:3000";
 
   static final String baseImageUrlupload = "http://$ipUrl:3000/uploads";

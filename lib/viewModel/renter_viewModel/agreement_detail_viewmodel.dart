@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:intl/intl.dart';
@@ -130,6 +132,7 @@ class AgreementDetailViewModel extends ChangeNotifier {
       final response = await ApiClient.get("/agreements/", isToken: true);
 
       if (response['success'] == true) {
+        log("Fetch Agreements Response: ${response.toString()}");
         // access agreements inside message
         final data = response['message'];
         agreements = data['agreements'] as List<dynamic>;

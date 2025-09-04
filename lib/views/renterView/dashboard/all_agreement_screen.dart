@@ -73,10 +73,17 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                       ),
                     ),
                     child: ListTile(
+                      leading: Icon(
+                        Icons.picture_as_pdf_rounded,
+                        size: 30,
+                        color: getStatusColor("${agreement['status']}"),
+                      ),
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Product: ${agreement['productID']['name']}"),
+                          Text("Agreement: ${index + 1} ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                           Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 4),
@@ -91,13 +98,30 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                         ],
                       ),
                       subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Owner: ${agreement['ownerID']['fullName']}"),
-                          Text("Renter: ${agreement['renterID']['fullName']}"),
-                          Text("Pickup: ${agreement['pickupDate']}"),
-                          Text("Return: ${agreement['returnDate']}"),
-                          Text("Status: ${agreement['status']}"),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
+                          Row(
+                            children: [
+                              Text("Owner:  ",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              Text("${agreement['ownerID']['fullName']}"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text("Agreement:  ",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              Text("${agreement['productID']['name']}"),
+                            ],
+                          ),
                           SizedBox(
                             height: 15,
                           ),
@@ -151,7 +175,8 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                               ),
                             ),
 
-                          if (profileViewModel.role == "renter")
+                          if (profileViewModel.role == "renter" &&
+                              agreement['status'] == 'completed')
                             ElevatedButton(
                               onPressed: () => {
                                 Navigator.push(
@@ -159,6 +184,12 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                                   MaterialPageRoute(
                                       builder: (context) => ReviewScreen(
                                             agreementId: agreement['_id'],
+                                            ownerImageUrl:
+                                                ApiClient.baseImageUrl +
+                                                    agreement['ownerID']
+                                                        ['profilePicture'],
+                                            ownerName: agreement['ownerID']
+                                                ['fullName'],
                                           )
 
                                       //    AgreementPdfScreen(
@@ -169,7 +200,7 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(double.infinity, 40),
-                                backgroundColor: Colors.grey,
+                                backgroundColor: Colors.yellow[700],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
