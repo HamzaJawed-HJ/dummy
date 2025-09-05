@@ -20,12 +20,21 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("${ApiClient.baseImageUrl}${product.image}");
-    return Card(
-      color: Colors.white,
-      shadowColor: Colors.black,
-      elevation: 3,
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 6,
+            offset: const Offset(2, 2),
+          )
+        ],
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

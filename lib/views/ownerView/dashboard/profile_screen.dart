@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
@@ -5,6 +7,7 @@ import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/change_password_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/edit_profile_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/upload_document_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/owners_review_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/profile%20Screen/edit_user_profile_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/widgets/profile_screen_widget.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   loadData() async {
     await Provider.of<UserProfileViewModel>(context, listen: false)
         .getProfile(context: context);
+    // log("profile id:"+{profileid});
 
     await Provider.of<UserProfileViewModel>(context, listen: false)
         .loadUserData();
@@ -152,15 +156,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         fontSize: 20,
                         fontWeight: FontWeight.w500),
                   ),
+                  const SizedBox(height: 10),
 
-                  // _buildProfileDetailRow(
-                  //     " ", profileViewModel.email ?? "Loading..."),
-                  // _buildProfileDetailRow("Phone Number",
-                  //     profileViewModel.phoneNumber ?? "Loading..."),
-                  // _buildProfileDetailRow(
-                  //     "CNIC", profileViewModel.cnic ?? "Loading..."),
+                  GestureDetector(
+                    onTap: () {
+                      //  Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                   builder: (context) => OwnersReviewScreen(
+                      //                       ownerId: 
+                      //                       // product.owner.id,
+                      //                       ,ownerImageUrl: ApiClient.baseImageUrl +
+                      //                               // product.owner.profilePicture ??
+                      //                        ,
+                      //                       ownerName:
+                      //                           product.owner.fullName ?? "")));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ...List<Widget>.generate(
+                          3,
+                          (index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 22,
+                          ),
+                        ),
+                        Text(
+                          "Reviews",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                              decoration: TextDecoration.underline),
+                        ),
+                      ],
+                    ),
+                  ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   const Divider(height: 10),
 
                   ProfileWidget(

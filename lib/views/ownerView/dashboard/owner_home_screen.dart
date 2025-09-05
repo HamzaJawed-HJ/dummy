@@ -167,7 +167,7 @@ Widget _buildStatsRow({int? totalItem, rentedItem, availableItems}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      _statCard("Available", availableItems, Icons.check_circle),
+      _statCard("Available", availableItems - rentedItem!, Icons.check_circle),
       _statCard("Total Items", totalItem!, Icons.inventory),
       _statCard("Rented", rentedItem!, Icons.local_shipping),
     ],
@@ -176,8 +176,21 @@ Widget _buildStatsRow({int? totalItem, rentedItem, availableItems}) {
 
 Widget _statCard(String label, int count, IconData icon) {
   return Expanded(
-    child: Card(
-      elevation: 2,
+    child: Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 6,
+            offset: const Offset(2, 2),
+          )
+        ],
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 12),
         child: Column(

@@ -58,7 +58,6 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
             // color: blueColor,
           ),
         ),
-
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -105,9 +104,22 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                     itemCount: productVM.request.length,
                     itemBuilder: (context, index) {
                       var req = productVM.request[index];
-                      return Card(
-                        elevation: 3,
-                        margin: EdgeInsets.only(bottom: 20),
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 4),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade300,
+                              blurRadius: 6,
+                              offset: const Offset(2, 2),
+                            )
+                          ],
+                        ),
                         child: Padding(
                           padding: EdgeInsets.all(12),
                           child: Column(

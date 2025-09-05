@@ -62,7 +62,21 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
               itemBuilder: (context, index) {
                 final agreement = vm.agreements[index] as Map<String, dynamic>;
 
-                return Card(
+                return Container(
+                  margin: const EdgeInsets.all(8),
+                  // width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        blurRadius: 6,
+                        offset: const Offset(2, 2),
+                      )
+                    ],
+                  ),
                   child: GestureDetector(
                     onTap: () => Navigator.push(
                       context,
@@ -149,7 +163,7 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                                     color: Colors.white,
                                   ),
                                   SizedBox(
-                                    width: 10,
+                                    width: 5,
                                   ),
                                   vm.loadingAgreements
                                           .contains(agreement['_id'])
@@ -165,7 +179,7 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                                         )
                                       : Text(
                                           agreement['status'] == 'active'
-                                              ? "Mark As Completed"
+                                              ? "Mark As Complete"
                                               : "Done",
                                           style: TextStyle(
                                               fontSize: 16,
@@ -174,55 +188,78 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                                 ],
                               ),
                             ),
-
+                          //renter role button
                           if (profileViewModel.role == "renter" &&
                               agreement['status'] == 'completed')
-                            ElevatedButton(
-                              onPressed: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                            if (agreement['reviewed'] == true)
+                              ElevatedButton(
+                                onPressed: null, // disables button
+                                style: ElevatedButton.styleFrom(
+                                  disabledBackgroundColor: Colors.red[500],
+                                  minimumSize: Size(double.infinity, 40),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.check_circle,
+                                        color: Colors.white),
+                                    SizedBox(width: 10),
+                                    Text("Reviewed",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            letterSpacing: 2,
+                                            color: Colors.white)),
+                                  ],
+                                ),
+                              )
+                            else
+                              ElevatedButton(
+                                onPressed: () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
                                       builder: (context) => ReviewScreen(
-                                            agreementId: agreement['_id'],
-                                            ownerImageUrl:
-                                                ApiClient.baseImageUrl +
-                                                    agreement['ownerID']
-                                                        ['profilePicture'],
-                                            ownerName: agreement['ownerID']
-                                                ['fullName'],
-                                          )
-
-                                      //    AgreementPdfScreen(
-                                      //       pdfUrl: ApiClient.basepdfUrl +
-                                      //           agreement['fileUrl']),
+                                        agreementId: agreement['_id'],
+                                        ownerImageUrl: ApiClient.baseImageUrl +
+                                            agreement['ownerID']
+                                                ['profilePicture'],
+                                        ownerName: agreement['ownerID']
+                                            ['fullName'],
                                       ),
-                                )
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(double.infinity, 40),
-                                backgroundColor: Colors.yellow[700],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  );
+
+                                  if (result == true) {
+                                    Provider.of<AgreementDetailViewModel>(
+                                            context,
+                                            listen: false)
+                                        .fetchAgreements(); // reload list
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(double.infinity, 40),
+                                  backgroundColor: Colors.yellow[700],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.rate_review,
+                                        color: Colors.white),
+                                    SizedBox(width: 10),
+                                    Text("Write Review",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            letterSpacing: 2,
+                                            color: Colors.white)),
+                                  ],
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.info_outline,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text("Write Reviews",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          letterSpacing: 2,
-                                          color: Colors.white)),
-                                ],
-                              ),
-                            ),
                         ],
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios),

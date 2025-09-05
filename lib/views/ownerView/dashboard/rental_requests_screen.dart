@@ -101,9 +101,22 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                     itemBuilder: (context, index) {
                       var req = productVM.approvalList[index];
                       print(req.renterRequestID!.sId);
-                      return Card(
-                        elevation: 3,
-                        margin: EdgeInsets.only(bottom: 20),
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 1),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade300,
+                              blurRadius: 6,
+                              offset: const Offset(2, 2),
+                            )
+                          ],
+                        ),
                         child: Padding(
                           padding: EdgeInsets.all(12),
                           child: Column(
@@ -228,9 +241,7 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                                     child: Column(
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {
-                                           
-                                          },
+                                          onPressed: () {},
                                           style: ElevatedButton.styleFrom(
                                             minimumSize:
                                                 Size(double.infinity, 40),
@@ -273,8 +284,8 @@ class _RentalRequestsScreenState extends State<RentalRequestsScreen> {
                                                       .renterID!
                                                       .sId!,
                                                   context: context,
-
-image: "${ApiClient.baseImageUrl}+${imageVM.profilePicture}",
+                                                  image:
+                                                      "${ApiClient.baseImageUrl}+${imageVM.profilePicture}",
 
                                                   // image: req
                                                   //         .renterRequestID

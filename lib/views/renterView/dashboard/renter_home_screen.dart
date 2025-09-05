@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
+import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewModel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/meaasages_view.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/all_agreement_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/owners_review_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/rent_product_detail_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/widgets/car_card_widget.dart';
 import 'package:provider/provider.dart';
@@ -113,8 +115,21 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
                     return Column(
                       children: productVM.products.map((product) {
                         return CarCard(
+                          onTapReviews: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OwnersReviewScreen(
+                                        ownerId: product.owner.id,
+                                        ownerImageUrl: ApiClient.baseImageUrl +
+                                                product.owner.profilePicture ??
+                                            "",
+                                        ownerName:
+                                            product.owner.fullName ?? "")));
+                          },
+                          owner: product.owner,
                           onClick: () {
-                            log("owner  ID: ${product.ownerID}");
+                            log("owner  ID: ${product.owner.id}");
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
                                 return RentProductDetailsScreen(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:fyp_renterra_frontend/core/utlis/session_manager.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:http/http.dart' as http;
@@ -40,7 +41,10 @@ class ProductRepository {
       if (response.statusCode == 201) {
         return {"success": true, 'message': decoded['message']};
       } else {
-        return {"success": true, 'message': decoded['message'] ?? 'Failed to create product'};
+        return {
+          "success": true,
+          'message': decoded['message'] ?? 'Failed to create product'
+        };
       }
     } catch (e) {
       print(' Product Create Error: $e');
@@ -73,7 +77,8 @@ class ProductRepository {
 
 // Only add image file if it's not a URL
       if (!imageFile.split(":")[0].startsWith("http")) {
-        request.files.add(await http.MultipartFile.fromPath('image', imageFile));
+        request.files
+            .add(await http.MultipartFile.fromPath('image', imageFile));
       }
 
       var response = await request.send();
@@ -84,9 +89,16 @@ class ProductRepository {
       print(' Product Create Response: ${responseBody.body}');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        return {"success": true, 'message': decoded['message'], 'product': decoded['product']};
+        return {
+          "success": true,
+          'message': decoded['message'],
+          'product': decoded['product']
+        };
       } else {
-        return {"success": true, 'message': decoded['message'] ?? 'Failed to create product'};
+        return {
+          "success": true,
+          'message': decoded['message'] ?? 'Failed to create product'
+        };
       }
     } catch (e) {
       print(' Product Create Error: $e');
@@ -107,6 +119,8 @@ class ProductRepository {
 
     if (response.statusCode == 200) {
       final List<dynamic> products = json.decode(response.body);
+
+      print(products.toString());
       return products;
     } else {
       throw Exception('Failed to fetch your products');
@@ -126,6 +140,7 @@ class ProductRepository {
 
     if (response.statusCode == 200) {
       final List<dynamic> products = json.decode(response.body);
+      print(products.toString());
       return products;
     } else {
       throw Exception('Failed to fetch your products');
@@ -175,7 +190,8 @@ class ProductRepository {
     required String status,
   }) async {
     final token = await SessionManager.getAccessToken();
-    final url = Uri.parse('${ApiClient.baseUrl}/rentalRequests/$requestId/status');
+    final url =
+        Uri.parse('${ApiClient.baseUrl}/rentalRequests/$requestId/status');
 
     final response = await http.put(
       url,

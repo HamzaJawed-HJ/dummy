@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
+import 'package:fyp_renterra_frontend/data/models/product_model.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 
 class CarCard extends StatelessWidget {
@@ -13,6 +14,10 @@ class CarCard extends StatelessWidget {
   final double? width, imageHeight;
   void Function()? onClick;
 
+  VoidCallback onTapReviews;
+
+  Owner owner;
+
   CarCard(
       {super.key,
       required this.imageUrl,
@@ -24,14 +29,18 @@ class CarCard extends StatelessWidget {
       this.isFeatured = false,
       this.isInsured = false,
       this.width,
-      this.imageHeight});
+      this.imageHeight,
+      required this.owner,
+      required this.onTapReviews});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      
       width: width ?? 180,
       decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         boxShadow: [
@@ -107,6 +116,58 @@ class CarCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Divider(),
+                const SizedBox(height: 8),
+                // ✅ Owner row (profile + name + email)
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundImage: NetworkImage(
+                        "${ApiClient.baseImageUrl}${owner.profilePicture}", // owner picture
+                      ),
+                      onBackgroundImageError: (_, __) =>
+                          const Icon(Icons.person, size: 32),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        owner.fullName,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    //reviews icon and text
+                    GestureDetector(
+                      onTap: onTapReviews,
+                      child: Row(
+                        children: [
+                          ...List<Widget>.generate(
+                            3,
+                            (index) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 22,
+                            ),
+                          ),
+                          Text(
+                            "Reviews",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                Divider(),
+                // ✅ Existing car details
+
                 Text(title,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 18)),
