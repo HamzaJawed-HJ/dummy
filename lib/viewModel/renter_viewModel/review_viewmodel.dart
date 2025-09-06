@@ -85,6 +85,25 @@ class ReviewViewmodel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+  Future<void> fetchMyOwnerReviews() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final response = await ApiClient.get("/reviews/me",
+    isToken: true
+    );
+
+    if (response['success'] == true) {
+      reviews = response['message']; // API returns a list
+      _calculateAverageRating();
+    } else {
+      reviews = [];
+      averageRating = 0.0;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
 
   void _calculateAverageRating() {
     if (reviews.isEmpty) {

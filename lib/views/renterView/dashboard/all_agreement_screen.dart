@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/agreement_detail_viewmodel.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
+import 'package:fyp_renterra_frontend/views/ownerView/dashboard/onwer_my_reviews.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/agrement_pdf_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/owners_review_screen.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/payment_screen.dart';
 import 'package:fyp_renterra_frontend/views/renterView/dashboard/review_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +42,7 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
     }
 
     final profileViewModel = Provider.of<UserProfileViewModel>(context);
+    // context.read<AgreementDetailViewModel>().fetchAgreements();
     return Scaffold(
       appBar: AppBar(title: const Text("My Agreements")),
       body: Consumer<AgreementDetailViewModel>(
@@ -86,183 +90,298 @@ class _AllAgreementScreenState extends State<AllAgreementScreen> {
                                 ApiClient.basepdfUrl + agreement['fileUrl']),
                       ),
                     ),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.picture_as_pdf_rounded,
-                        size: 30,
-                        color: getStatusColor("${agreement['status']}"),
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Agreement: ${index + 1} ",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                          Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
+                    child: Column(
+                      children: [
+                        if (profileViewModel.role == "renter") ...[
+                          if (agreement['isPaid'] == true)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 12),
                               decoration: BoxDecoration(
-                                color: getStatusColor("${agreement['status']}"),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                "${agreement['status']}",
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                      subtitle: Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // SizedBox(
-                          //   height: 5,
-                          // ),
-                          Row(
-                            children: [
-                              Text("Owner:  ",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              Text("${agreement['ownerID']['fullName']}"),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Agreement:  ",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              Text("${agreement['productID']['name']}"),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          //owner role button
-                          if (profileViewModel.role == "owner")
-                            ElevatedButton(
-                              onPressed: () {
-                                if (agreement['status'] != 'completed')
-                                  vm.agreementStatusChange(agreement['_id']);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(double.infinity, 40),
-                                backgroundColor: agreement['status'] == 'active'
-                                    ? Colors.blue[400]
-                                    : Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                color: Colors.green,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: const Text(
+                                "Payment Completed",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          else
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                              ),
+                              child: const Text(
+                                "Payment Pending",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                        ],
+                        ListTile(
+                          leading: Icon(
+                            Icons.picture_as_pdf_rounded,
+                            size: 30,
+                            color: getStatusColor("${agreement['status']}"),
+                          ),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Agreement: ${index + 1} ",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: getStatusColor(
+                                        "${agreement['status']}"),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    "${agreement['status']}",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ],
+                          ),
+                          subtitle: Column(
+                            children: [
+                              Row(
                                 children: [
-                                  Icon(
-                                    Icons.check_circle_outline_rounded,
-                                    color: Colors.white,
+                                  Text("Owner:  ",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold)),
+                                  Text("${agreement['ownerID']['fullName']}"),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text("Agreement:  ",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold)),
+                                  Text("${agreement['productID']['name']}"),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+
+                              //owner role button
+                              if (profileViewModel.role == "owner" &&
+                                  agreement['status'] == 'active')
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // if (agreement['status'] != 'completed')
+                                    vm.agreementStatusChange(agreement['_id']);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(double.infinity, 40),
+                                    backgroundColor: Colors.blue[400],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
-                                  SizedBox(
-                                    width: 5,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.check_circle_outline_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      vm.loadingAgreements
+                                              .contains(agreement['_id'])
+                                          ? const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                height: 10,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                  strokeWidth: 2,
+                                                ),
+                                              ),
+                                            )
+                                          : Text("Mark As Complete",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  letterSpacing: 2,
+                                                  color: Colors.white)),
+                                    ],
                                   ),
-                                  vm.loadingAgreements
-                                          .contains(agreement['_id'])
-                                      ? const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            height: 10,
-                                            child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                              strokeWidth: 2,
-                                            ),
-                                          ),
-                                        )
-                                      : Text(
-                                          agreement['status'] == 'active'
-                                              ? "Mark As Complete"
-                                              : "Done",
+                                ),
+                              // renter flow → make payment
+                              if (profileViewModel.role == "renter" &&
+                                  agreement['status'] == 'active' &&
+                                  agreement['isPaid'] == false)
+                                ElevatedButton(
+                                  onPressed: () {
+                                    log(
+                                      agreement['productID']['price']
+                                          .toString(),
+                                    );
+                                    log(agreement['_id']);
+                                    log(agreement['productID']['name']);
+                                    log(agreement['isPaid'].toString());
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PaymentScreen(
+                                          agreementId: agreement['_id'],
+                                          amountPKR: agreement['productID']
+                                                  ['price']
+                                              .toDouble(),
+                                          productName: agreement['productID']
+                                              ['name'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(double.infinity, 35),
+                                    backgroundColor: Colors.blue[300],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.payment,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text("Make Payment",
                                           style: TextStyle(
                                               fontSize: 16,
                                               letterSpacing: 2,
                                               color: Colors.white)),
-                                ],
-                              ),
-                            ),
-                          //renter role button
-                          if (profileViewModel.role == "renter" &&
-                              agreement['status'] == 'completed')
-                            if (agreement['reviewed'] == true)
-                              ElevatedButton(
-                                onPressed: null, // disables button
-                                style: ElevatedButton.styleFrom(
-                                  disabledBackgroundColor: Colors.red[500],
-                                  minimumSize: Size(double.infinity, 40),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    ],
                                   ),
                                 ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.check_circle,
-                                        color: Colors.white),
-                                    SizedBox(width: 10),
-                                    Text("Reviewed",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            letterSpacing: 2,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                              )
-                            else
-                              ElevatedButton(
-                                onPressed: () async {
-                                  final result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ReviewScreen(
-                                        agreementId: agreement['_id'],
-                                        ownerImageUrl: ApiClient.baseImageUrl +
-                                            agreement['ownerID']
-                                                ['profilePicture'],
-                                        ownerName: agreement['ownerID']
-                                            ['fullName'],
-                                      ),
+                              // renter flow → already reviewed
+                              if (profileViewModel.role == "renter" &&
+                                  agreement['status'] == 'completed' &&
+                                  agreement['reviewed'] == true)
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             OwnersReviewScreen(
+                                    //                 ownerId: agreement['ownerID']
+                                    //                     ['_id'],
+                                    //                 ownerImageUrl:
+                                    //                     ApiClient.baseImageUrl +
+                                    //                         profileViewModel
+                                    //                             .profilePicture
+                                    //                 ,
+                                    //                 ownerName: profileViewModel
+                                    //                         .fullName ??
+                                    //                     "")));
+                                  }, // disables button
+                                  style: ElevatedButton.styleFrom(
+                                    // disabledBackgroundColor: Colors.red[500],
+                                    minimumSize: Size(double.infinity, 35),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                  );
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 54, 114, 244),
+                                  ),
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.check_circle,
+                                          color: Colors.white),
+                                      SizedBox(width: 10),
+                                      Text("Reviewed",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              letterSpacing: 2,
+                                              color: Colors.white)),
+                                    ],
+                                  ),
+                                )
+                              // renter flow → review
+                              ,
+                              if (profileViewModel.role == "renter" &&
+                                  agreement['status'] == 'completed' &&
+                                  agreement['reviewed'] == false)
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ReviewScreen(
+                                          agreementId: agreement['_id'],
+                                          ownerImageUrl:
+                                              ApiClient.baseImageUrl +
+                                                  agreement['ownerID']
+                                                      ['profilePicture'],
+                                          ownerName: agreement['ownerID']
+                                              ['fullName'],
+                                        ),
+                                      ),
+                                    );
 
-                                  if (result == true) {
-                                    Provider.of<AgreementDetailViewModel>(
-                                            context,
-                                            listen: false)
-                                        .fetchAgreements(); // reload list
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(double.infinity, 40),
-                                  backgroundColor: Colors.yellow[700],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    if (result == true) {
+                                      Provider.of<AgreementDetailViewModel>(
+                                              context,
+                                              listen: false)
+                                          .fetchAgreements(); // reload list
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(double.infinity, 40),
+                                    backgroundColor: Colors.yellow[700],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.rate_review,
+                                          color: Colors.white),
+                                      SizedBox(width: 10),
+                                      Text("Write Review",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              letterSpacing: 2,
+                                              color: Colors.white)),
+                                    ],
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.rate_review,
-                                        color: Colors.white),
-                                    SizedBox(width: 10),
-                                    Text("Write Review",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            letterSpacing: 2,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                        ],
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios),
+                            ],
+                          ),
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      ],
                     ),
                   ),
                 );

@@ -160,6 +160,7 @@ class ProductRepository {
 
     if (response.statusCode == 200) {
       final List<dynamic> products = json.decode(response.body);
+
       return products;
     } else {
       throw Exception('Failed to fetch your products');

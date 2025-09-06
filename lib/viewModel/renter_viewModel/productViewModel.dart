@@ -175,6 +175,7 @@ class ProductViewModel extends ChangeNotifier {
     try {
       error = null;
       final data = await ProductRepository.fetchAllRequest();
+      log(data.toString());
       _request =
           data.map((e) => RequestModel.fromJson(e)).toList().reversed.toList();
     } catch (e) {

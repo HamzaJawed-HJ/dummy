@@ -160,9 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ),
                             Icon(
-                              isMe
-                                  ? Icons.check_circle_outline_outlined
-                                  : Icons.check_circle_rounded,
+                              isMe ? Icons.done_all : Icons.done_all,
                               size: 20,
                               grade: 10,
                               color: msg.seen! ? Colors.blue : Colors.black,

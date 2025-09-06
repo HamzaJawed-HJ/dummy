@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
+import 'package:fyp_renterra_frontend/views/renterView/dashboard/all_agreement_screen.dart';
 import 'package:intl/intl.dart';
 
 class AgreementDetailViewModel extends ChangeNotifier {
@@ -85,6 +86,15 @@ class AgreementDetailViewModel extends ChangeNotifier {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Agreement generated successfully")),
         );
+        Navigator.pop(context);
+
+        // ✅ Navigate to AllAgreementScreen
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AllAgreementScreen(),
+            ));
 
         // ✅ Show popup dialog
         showDialog(
@@ -111,6 +121,7 @@ class AgreementDetailViewModel extends ChangeNotifier {
               content:
                   Text(response['message'] ?? "Failed to generate agreement")),
         );
+
         Navigator.pop(context);
       }
     } catch (e) {

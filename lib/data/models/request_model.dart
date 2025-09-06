@@ -6,6 +6,7 @@ class RequestModel {
   final String? status;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final bool hasAgreement; // ✅ new field
 
   RequestModel({
     this.id,
@@ -15,20 +16,33 @@ class RequestModel {
     this.status,
     this.createdAt,
     this.updatedAt,
+    this.hasAgreement = false, // ✅ default false
   });
 
   factory RequestModel.fromJson(Map<String, dynamic> json) {
     return RequestModel(
       id: json['_id'] as String?,
-      product: json['productID'] != null ? ProductRequestModel.fromJson(json['productID']) : null,
-      owner: json['ownerID'] != null ? UserRequestModel.fromJson(json['ownerID']) : null,
-      renter: json['renterID'] != null ? UserRequestModel.fromJson(json['renterID']) : null,
+      product: json['productID'] != null
+          ? ProductRequestModel.fromJson(json['productID'])
+          : null,
+      owner: json['ownerID'] != null
+          ? UserRequestModel.fromJson(json['ownerID'])
+          : null,
+      renter: json['renterID'] != null
+          ? UserRequestModel.fromJson(json['renterID'])
+          : null,
       status: json['status'] as String?,
-      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'])
+          : null,
+      hasAgreement: json['hasAgreement'] ?? false, // ✅ parse from API
     );
   }
 }
+
 class ProductRequestModel {
   final String? id;
   final String? category;
@@ -67,11 +81,16 @@ class ProductRequestModel {
       location: json['location'] as String?,
       image: json['image'] as String?,
       ownerID: json['ownerID'] as String?,
-      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'])
+          : null,
     );
   }
 }
+
 class UserRequestModel {
   final String? id;
   final String? email;
@@ -113,8 +132,12 @@ class UserRequestModel {
       role: json['role'] as String?,
       shopName: json['shopName'] as String?,
       shopAddress: json['shopAddress'] as String?,
-      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'])
+          : null,
     );
   }
 }

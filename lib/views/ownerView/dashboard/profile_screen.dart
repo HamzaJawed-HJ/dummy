@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_renterra_frontend/core/constants/app_colors.dart';
 import 'package:fyp_renterra_frontend/data/networks/api_client.dart';
 import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/renter_profile_viewModel.dart';
+import 'package:fyp_renterra_frontend/views/ownerView/dashboard/onwer_my_reviews.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/change_password_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/edit_profile_screen.dart';
 import 'package:fyp_renterra_frontend/views/ownerView/dashboard/profile%20Screen/upload_document_screen.dart';
@@ -158,19 +159,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 10),
 
+//
+                  // if (profileViewModel.role == "owner")
                   GestureDetector(
                     onTap: () {
-                      //  Navigator.push(
-                      //               context,
-                      //               MaterialPageRoute(
-                      //                   builder: (context) => OwnersReviewScreen(
-                      //                       ownerId: 
-                      //                       // product.owner.id,
-                      //                       ,ownerImageUrl: ApiClient.baseImageUrl +
-                      //                               // product.owner.profilePicture ??
-                      //                        ,
-                      //                       ownerName:
-                      //                           product.owner.fullName ?? "")));
+                      log("owner id:" + profileViewModel.id!);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OnwerMyReviewsScreen(
+                                  ownerImageUrl: ApiClient.baseImageUrl +
+                                      profileViewModel.profilePicture
+                                  // product.owner.profilePicture ??
+                                  ,
+                                  ownerName: profileViewModel.fullName ?? "")));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

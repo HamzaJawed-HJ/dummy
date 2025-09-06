@@ -96,10 +96,6 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
 
                 return RefreshIndicator(
                   onRefresh: productVM.getAllRequest,
-                  //  () async {
-                  //   await Provider.of<ProductViewModel>(context, listen: false)
-                  //       .getAllRequest();
-                  // },
                   child: ListView.builder(
                     itemCount: productVM.request.length,
                     itemBuilder: (context, index) {
@@ -205,10 +201,42 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                               SizedBox(height: 10),
                               Divider(),
                               SizedBox(height: 10),
-                              Text("Owner Information",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Owner Information",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  if (req.hasAgreement == true)
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red[500],
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.done_outline_rounded,
+                                            color: Colors.white,
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            "Agreement Generated",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
                               SizedBox(height: 10),
                               Row(
                                 children: [
@@ -359,48 +387,52 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              log(req.id!);
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AgreementDetailScreen(
-                                                      rentalRequestId: req.id!,
-                                                    ),
-                                                  ));
 
-                                              // print(req.owner!.id);
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              minimumSize:
-                                                  Size(double.infinity, 40),
-                                              backgroundColor:
-                                                  Colors.amber[600],
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                        if (req.hasAgreement == false)
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                log(req.hasAgreement
+                                                    .toString());
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AgreementDetailScreen(
+                                                        rentalRequestId:
+                                                            req.id!,
+                                                      ),
+                                                    ));
+
+                                                // print(req.owner!.id);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                minimumSize:
+                                                    Size(double.infinity, 40),
+                                                backgroundColor:
+                                                    Colors.amber[600],
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
                                               ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.document_scanner,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text("Generate Agreement",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        letterSpacing: 2,
-                                                        color: Colors.white)),
-                                              ],
-                                            )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.document_scanner,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text("Generate Agreement",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          letterSpacing: 2,
+                                                          color: Colors.white)),
+                                                ],
+                                              )),
                                       ],
                                     ),
                                   ),

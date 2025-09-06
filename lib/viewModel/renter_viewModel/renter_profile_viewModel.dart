@@ -244,10 +244,13 @@ class UserProfileViewModel extends ChangeNotifier {
         isToken: true);
 
     if (response['success'] == true) {
-      log(response.toString());
+      // log(response.toString());
       log(response['message']['user']['profilePicture']);
       log(response['message']['user']['fullName']);
       log(response['message']['user']['role']);
+      log(response['message']['user']['_id']);
+
+      id = await response['message']['user']['_id'];
 
       final prefs = await SharedPreferences.getInstance();
 
@@ -256,6 +259,7 @@ class UserProfileViewModel extends ChangeNotifier {
       await prefs.setString(
           'cnicPicture', response['message']['user']['cnicPicture']);
       await prefs.setString('fullName', fullName ?? "");
+      await prefs.setString('role', role ?? "");
       await prefs.setString('role', role ?? "");
 
       // await HelperFunctions.showSuccessSnackbar(context, 'Upload successful');
