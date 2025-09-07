@@ -47,6 +47,7 @@ dependencies:
   flutter_rating: ^2.0.2
   flutter_rating_bar: ^4.0.1
   flutter_stripe: ^10.1.1
+  google_mlkit_text_recognition: ^0.13.0
 
 
 dev_dependencies:

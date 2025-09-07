@@ -11,6 +11,7 @@ import 'package:fyp_renterra_frontend/viewModel/renter_viewModel/productViewMode
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class UserProfileViewModel extends ChangeNotifier {
   String? _fullName;
@@ -85,16 +86,92 @@ class UserProfileViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> cnicPickImage() async {
+  // Future<void> cnicPickImage() async {
+  //   final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  //   if (pickedFile != null) {
+  //     cnicImage = File(pickedFile.path);
+
+  //     // Run OCR on the picked image
+  //     final inputImage = InputImage.fromFile(cnicImage!);
+  //     final textRecognizer =
+  //         TextRecognizer(script: TextRecognitionScript.latin);
+
+  //     final RecognizedText recognizedText =
+  //         await textRecognizer.processImage(inputImage);
+
+  //     await textRecognizer.close();
+
+  //     log("OCR Result: ${recognizedText.text}");
+
+  //     // ✅ Validate if CNIC (13 digits)
+  //     final cnicRegex = RegExp(r'\b\d{5}-\d{7}-\d{1}\b');
+  //     final match = cnicRegex.firstMatch(recognizedText.text);
+
+  //     log("nic Result: ${match?.group(0)}");
+
+  //     if (match != null) {
+  //       log("Valid CNIC Detected: ${match.group(0)}");
+  //       // proceed (maybe store CNIC number in variable)
+  //     } else {
+  //       log("❌ No valid CNIC detected. Ask user to retake.");
+  //       // you can show a snackbar or dialog here
+  //     }
+
+  //     notifyListeners();
+  //   }
+  // }
+
+  Future<void> cnicPickImage(BuildContext context) async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      cnicImage = File(pickedFile.path);
-      log(cnicImage!.path);
-      log("split image path ${cnicImage!.path.split('/cache/')[1]}");
+      final tempImage = File(pickedFile.path);
 
-      notifyListeners();
+      // OCR
+      final inputImage = InputImage.fromFile(tempImage);
+      final textRecognizer =
+          TextRecognizer(script: TextRecognitionScript.latin);
+      final RecognizedText recognizedText =
+          await textRecognizer.processImage(inputImage);
+      await textRecognizer.close();
+
+      log("OCR Result: ${recognizedText.text}");
+
+      // CNIC regex
+      final cnicRegex = RegExp(r'\b\d{5}-\d{7}-\d{1}\b');
+      final match = cnicRegex.firstMatch(recognizedText.text);
+
+      if (match != null) {
+        // ✅ Valid CNIC → save image & notify
+        cnicImage = tempImage;
+        log("✅ Valid CNIC Detected: ${match.group(0)}");
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("✅ CNIC detected successfully")),
+        );
+
+        notifyListeners();
+      } else {
+        // ❌ Invalid CNIC → don’t save image
+        log("❌ No valid CNIC detected. Please retake.");
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("❌ No valid CNIC detected. Please retake.")),
+        );
+      }
     }
   }
+
+  // Future<void> cnicPickImage() async {
+  //   final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  //   if (pickedFile != null) {
+  //     cnicImage = File(pickedFile.path);
+  //     log(cnicImage!.path);
+  //     log("split image path ${cnicImage!.path.split('/cache/')[1]}");
+
+  //     notifyListeners();
+  //   }
+  // }
 
   Future<void> uploadImages({
     required File? profileImage,

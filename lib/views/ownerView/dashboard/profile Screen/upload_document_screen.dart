@@ -9,8 +9,9 @@ class UploadDocumentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileViewModel =
-        Provider.of<UserProfileViewModel>(context, listen: false);
+    final profileViewModel = Provider.of<UserProfileViewModel>(
+      context,
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -39,8 +40,7 @@ class UploadDocumentScreen extends StatelessWidget {
 
               Center(
                 child: GestureDetector(
-                  onTap: profileViewModel.profileImage != null ||
-                          profileViewModel.profilePicture == ""
+                  onTap: profileViewModel.profilePicture == ""
                       ? profileVM.pickProfileImage
                       : () {},
                   child: Stack(
@@ -110,7 +110,9 @@ class UploadDocumentScreen extends StatelessWidget {
                   onTap:
                       //  (profileViewModel.cnicPicture == "")
                       //     ?
-                      profileVM.cnicPickImage
+                      () {
+                    profileVM.cnicPickImage(context);
+                  }
                   // : () {},
                   ,
                   child: Container(
@@ -124,16 +126,22 @@ class UploadDocumentScreen extends StatelessWidget {
 
                     color: const Color(0xFFF9FAFB),
                     child: profileVM.cnicPicture != ""
-                        ? Image.network(
-                            "${ApiClient.baseImageUrl}${profileVM.cnicPicture!}"
-                            // ApiClient.baseImageUrl + profileVM.cnicPicture!,
-                            ,
-                            fit: BoxFit.cover,
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              "${ApiClient.baseImageUrl}${profileVM.cnicPicture!}"
+                              // ApiClient.baseImageUrl + profileVM.cnicPicture!,
+                              ,
+                              fit: BoxFit.cover,
+                            ),
                           )
                         : profileVM.cnicImage != null
-                            ? Image.file(
-                                profileVM.cnicImage!,
-                                fit: BoxFit.cover,
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.file(
+                                  profileVM.cnicImage!,
+                                  fit: BoxFit.fitWidth,
+                                ),
                               )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -42,11 +42,12 @@ class _RenterHomeScreenState extends State<RenterHomeScreen> {
             leadingWidth: double.infinity,
             toolbarHeight: 70,
             leading: ListTile(
-              leading: const CircleAvatar(
+              leading: CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage(
-                  "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg",
-                ),
+                    "${ApiClient.baseImageUrl}${v.profilePicture}"
+                    // "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg",
+                    ),
               ),
               title: Text(
                 "Hey, ${v.fullName ?? "Loading"}",
