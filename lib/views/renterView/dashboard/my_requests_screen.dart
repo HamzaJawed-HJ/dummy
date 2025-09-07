@@ -50,7 +50,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
         centerTitle: true,
         leading: SizedBox.shrink(),
         title: const Text(
-          'My Requestsrdfyug',
+          'My Requests',
           style: TextStyle(
             fontSize: 26,
             wordSpacing: 2,
