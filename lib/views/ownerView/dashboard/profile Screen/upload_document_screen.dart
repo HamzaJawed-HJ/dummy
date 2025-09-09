@@ -107,14 +107,11 @@ class UploadDocumentScreen extends StatelessWidget {
                 color: Colors.blue,
                 strokeWidth: 1.5,
                 child: GestureDetector(
-                  onTap:
-                      //  (profileViewModel.cnicPicture == "")
-                      //     ?
-                      () {
-                    profileVM.cnicPickImage(context);
-                  }
-                  // : () {},
-                  ,
+                  onTap: (profileViewModel.cnicPicture == "")
+                      ? () {
+                          profileVM.cnicPickImage(context);
+                        }
+                      : () {},
                   child: Container(
                     width: double.infinity,
                     height: 180,

@@ -87,6 +87,7 @@ class AgreementDetailViewModel extends ChangeNotifier {
           const SnackBar(content: Text("Agreement generated successfully")),
         );
         Navigator.pop(context);
+        Navigator.pop(context);
 
         // ✅ Navigate to AllAgreementScreen
 
